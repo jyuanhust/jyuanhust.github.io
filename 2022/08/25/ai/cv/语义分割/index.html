@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#FFF"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"><link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="alternate" type="application/rss+xml" title="yuan" href="https://huang-junyuan.github.io/rss.xml"><link rel="alternate" type="application/atom+xml" title="yuan" href="https://huang-junyuan.github.io/atom.xml"><link rel="alternate" type="application/json" title="yuan" href="https://huang-junyuan.github.io/feed.json"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext"><link rel="stylesheet" href="/css/app.css?v=0.2.5"><link rel="canonical" href="https://huang-junyuan.github.io/2022/08/25/ai/cv/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"><title>语义分割 - cv - ai | Mi Manchi = yuan = Whatever is worth doing at all is worth doing well</title><meta name="generator" content="Hexo 6.2.0"></head><body itemscope itemtype="http://schema.org/WebPage"><div id="loading"><div class="cat"><div class="body"></div><div class="head"><div class="face"></div></div><div class="foot"><div class="tummy-end"></div><div class="bottom"></div><div class="legs left"></div><div class="legs right"></div></div><div class="paw"><div class="hands left"></div><div class="hands right"></div></div></div></div><div id="container"><header id="header" itemscope itemtype="http://schema.org/WPHeader"><div class="inner"><div id="brand"><div class="pjax"><h1 itemprop="name headline">语义分割</h1><div class="meta"><span class="item" title="创建时间：2022-08-25 12:04:17"><span class="icon"><i class="ic i-calendar"></i> </span><span class="text">发表于</span> <time itemprop="dateCreated datePublished" datetime="2022-08-25T12:04:17+08:00">2022-08-25</time> </span><span class="item" title="本文字数"><span class="icon"><i class="ic i-pen"></i> </span><span class="text">本文字数</span> <span>7.5k</span> <span class="text">字</span> </span><span class="item" title="阅读时长"><span class="icon"><i class="ic i-clock"></i> </span><span class="text">阅读时长</span> <span>7 分钟</span></span></div></div></div><nav id="nav"><div class="inner"><div class="toggle"><div class="lines" aria-label="切换导航栏"><span class="line"></span> <span class="line"></span> <span class="line"></span></div></div><ul class="menu"><li class="item title"><a href="/" rel="start">Mi Manchi</a></li></ul><ul class="right"><li class="item theme"><i class="ic i-sun"></i></li><li class="item search"><i class="ic i-search"></i></li></ul></div></nav></div><div id="imgs" class="pjax"><ul><li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gipeu7txpzj20zk0m81kx.jpg"></li><li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicitht3xtj20zk0m8k5v.jpg"></li><li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gipewkhf1zj20zk0m81kx.jpg"></li><li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicitf0kl1j20zk0m87fe.jpg"></li><li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicliierfjj20zk0m8npd.jpg"></li><li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giclfw2t96j20zk0m8x6p.jpg"></li></ul></div></header><div id="waves"><svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs><g class="parallax"><use xlink:href="#gentle-wave" x="48" y="0"/><use xlink:href="#gentle-wave" x="48" y="3"/><use xlink:href="#gentle-wave" x="48" y="5"/><use xlink:href="#gentle-wave" x="48" y="7"/></g></svg></div><main><div class="inner"><div id="main" class="pjax"><div class="article wrap"><div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList"><i class="ic i-home"></i> <span><a href="/">首页</a></span><i class="ic i-angle-right"></i> <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/ai/" itemprop="item" rel="index" title="分类于 ai"><span itemprop="name">ai</span></a><meta itemprop="position" content="1"></span><i class="ic i-angle-right"></i> <span class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/ai/cv/" itemprop="item" rel="index" title="分类于 cv"><span itemprop="name">cv</span></a><meta itemprop="position" content="2"></span></div><article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN"><link itemprop="mainEntityOfPage" href="https://huang-junyuan.github.io/2022/08/25/ai/cv/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/images/avatar.jpg"><meta itemprop="name" content="yuan"><meta itemprop="description" content="Whatever is worth doing at all is worth doing well, "></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="yuan"></span><div class="body md" itemprop="articleBody"><h2 id="huggingface"><a class="anchor" href="#huggingface">#</a> huggingface</h2><p>语义分割为图像的每个像素分配一个标签或类。有几种类型的分割，在语义分割的情况下，同一对象的唯一实例之间没有区别。两个对象被赋予相同的标签（例如，“car” 而不是 “car-1” 和 “car-2”）。（这里讲的是同一类物体，比如各种车的么？还是同一个的物体的各个像素点）语义分割的常见实际应用包括训练自动驾驶汽车识别行人和重要的交通信息，识别医学图像中的细胞和异常，以及从卫星图像中监测环境变化。</p><p>本指南将向您展示如何在 (SceneParse150)[<span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9zY2VuZV9wYXJzZV8xNTA=">https://huggingface.co/datasets/scene_parse_150</span>] 数据集上微调 (SegFormer)[<span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kb2NzL3RyYW5zZm9ybWVycy9tYWluL2VuL21vZGVsX2RvYy9zZWdmb3JtZXIjc2VnZm9ybWVy">https://huggingface.co/docs/transformers/main/en/model_doc/segformer#segformer</span>]。</p><p>有关图像分割任务、数据集和指标的详细信息 <span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby90YXNrcy9pbWFnZS1zZWdtZW50YXRpb24=">https://huggingface.co/tasks/image-segmentation</span></p><pre><code>pip install -q datasets transformers evaluate
+</code></pre><h3 id="load-sceneparse150-dataset"><a class="anchor" href="#load-sceneparse150-dataset">#</a> Load SceneParse150 dataset</h3><p>从数据集库中加载 <span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9zY2VuZV9wYXJzZV8xNTA=">SceneParse150</span> 数据集的前 50 个示例，以便快速训练和测试模型：</p><p>该数据集的大小接近 1G</p><pre><code>from datasets import load_dataset
+
+ds = load_dataset(&quot;scene_parse_150&quot;, split=&quot;train[:50]&quot;)
+</code></pre><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662429164848.png" alt="1662429164848"></p><p>注：使用 <code>load_dataset(&quot;scene_parse_150&quot;)和load_dataset``(&quot;scene_parse_150&quot;, split=&quot;train[:50]&quot;)</code> 都会下载整个数据集，区别只是加载到 ds 中的大小不同。</p><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662429264062.png" alt="1662429264062"></p><p>将此数据集拆分为训练集和测试集：</p><pre><code>ds = ds.train_test_split(test_size=0.2)
+train_ds = ds[&quot;train&quot;]
+test_ds = ds[&quot;test&quot;]
+</code></pre><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662429371798.png" alt="1662429371798"></p><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662429511889.png" alt="1662429511889"></p><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662429639175.png" alt="1662429639175"></p><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662429662221.png" alt="1662429662221"></p><p>有一个 image 、annotation （这是分割地图或标签）和一个描述图像场景的 scene_category 字段，如 “厨房” 或 “办公室”。在本指南中，您只需要 image 和 annotation，这两者都是 PIL 映像。</p><p>image 是三通道的，annotation 是单通道的</p><pre><code>image = train_ds[0]['image']
+annotation = train_ds[0]['annotation']
+
+print(image, '\n', annotation)
+
+&lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=640x512 at 0x1C69BD73EB0&gt; 
+ &lt;PIL.PngImagePlugin.PngImageFile image mode=L size=640x512 at 0x1C69FE91790&gt;
+</code></pre><p>image 和 annotation 的长宽大小是相同的</p><pre><code>print(torch.from_numpy(np.array(annotation)).shape)
+print(torch.from_numpy(np.array(image)).shape)
+
+torch.Size([512, 640])
+torch.Size([512, 640, 3])
+</code></pre><p>annotation 图像上的数值为 0-150，0 表示其他，1-150 为<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0NTQUlMVmlzaW9uL3NjZW5lcGFyc2luZy9ibG9iL21hc3Rlci9vYmplY3RJbmZvMTUwLmNzdg==">这张表</span>上对应的类别。</p><p>您还需要创建一个将标签 ID 映射到标注分类的字典，这在以后设置模型时会很有用。从 Hub 下载映射并创建 id2label 和 label2id 字典</p><pre><code>import json
+from huggingface_hub import cached_download, hf_hub_url
+
+repo_id = &quot;datasets/huggingface/label-files&quot;
+filename = &quot;ade20k-hf-doc-builder.json&quot;
+id2label = json.load(open(cached_download(hf_hub_url(repo_id, filename)), &quot;r&quot;))
+id2label = &#123;int(k): v for k, v in id2label.items()&#125;
+label2id = &#123;v: k for k, v in id2label.items()&#125;
+num_labels = len(id2label)
+</code></pre><pre><code>import json
+from huggingface_hub import cached_download, hf_hub_url
+
+repo_id = &quot;datasets/huggingface/label-files&quot;
+filename = &quot;ade20k-id2label.json&quot;
+id2label = json.load(open(cached_download(hf_hub_url(repo_id, filename)), &quot;r&quot;))
+id2label = &#123;int(k): v for k, v in id2label.items()&#125;
+label2id = &#123;v: k for k, v in id2label.items()&#125;
+num_labels = len(id2label)
+</code></pre><p>id2label 来自的 <span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9odWdnaW5nZmFjZS9sYWJlbC1maWxlcy9ibG9iL21haW4vYWRlMjBrLWlkMmxhYmVsLmpzb24=">文件</span> 的两张截图，id 从 0 开始</p><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662437833443.png" alt="1662437833443"></p><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662437855177.png" alt="1662437855177"></p><h3 id="preprocess"><a class="anchor" href="#preprocess">#</a> Preprocess</h3><p>接下来，加载 SegFormer 特征提取器以准备模型的图像和注释 annotations。某些数据集（如此数据集）使用零索引作为 background 背景类。但是，后台类不包含在 150 个类中，因此您需要设置 reduce_labels=True，所有标签的 id 值都减 1（此时类别 label 的 id 值从 1 开始编号了）。零索引被替换为 255，因此它被 SegFormer 的 loss 损失函数忽略</p><pre><code>from transformers import AutoFeatureExtractor
+
+feature_extractor = AutoFeatureExtractor.from_pretrained(&quot;nvidia/mit-b0&quot;, reduce_labels=True)
+</code></pre><p>通常将一些数据增强应用于图像数据集，以使模型对过拟合更加可靠（鲁棒性）。在本指南中，您将使用 Torchvision 中的 <span class="exturl" data-url="aHR0cHM6Ly9weXRvcmNoLm9yZy92aXNpb24vc3RhYmxlL2dlbmVyYXRlZC90b3JjaHZpc2lvbi50cmFuc2Zvcm1zLkNvbG9ySml0dGVyLmh0bWw=">ColorJitter</span> 函数随机更改图像的颜色属性：</p><pre><code>from torchvision.transforms import ColorJitter
+
+jitter = ColorJitter(brightness=0.25, contrast=0.25, saturation=0.25, hue=0.1)
+</code></pre><p>现在创建两个预处理函数来准备模型的图像和注释。这些函数将图像转换为 pixel_values, 将注释 annotations 转换为 labels 。对于训练集，在将图像提供给特征提取器之前应用 jitter。对于测试集，特征提取器裁剪并规范化 images，并且只裁剪 labels，因为在测试期间不应用数据增强。</p><p>裁剪不属于数据增强，随机改变图片的颜色属性（如对比度，饱和度等）才属于数据增强。</p><pre><code>
+# 根据官方文档，example_batch是一个字典，每一个键值对中，值是一个列表
+def train_transforms(example_batch):
+    images = [jitter(x) for x in example_batch[&quot;image&quot;]]
+    labels = [x for x in example_batch[&quot;annotation&quot;]]
+    inputs = feature_extractor(images, labels)
+    return inputs
+
+
+def val_transforms(example_batch):
+    images = [x for x in example_batch[&quot;image&quot;]]
+    labels = [x for x in example_batch[&quot;annotation&quot;]]
+    inputs = feature_extractor(images, labels)
+    return inputs
+</code></pre><p>若要对整个数据集应用，请使用 Datasets <span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kb2NzL2RhdGFzZXRzL21haW4vZW4vcGFja2FnZV9yZWZlcmVuY2UvbWFpbl9jbGFzc2VzI2RhdGFzZXRzLkRhdGFzZXQuc2V0X3RyYW5zZm9ybQ==">set_transforml</span> 函数。转换是动态应用的，速度更快，占用的磁盘空间更少</p><pre><code>train_ds.set_transform(train_transforms)
+test_ds.set_transform(val_transforms)
+</code></pre><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662452898690.png" alt="1662452898690"></p><p>上面只是设置了变换 (set_transform)，还没有对数据集进行变换。</p><h3 id="从feature_extractor的返回值查看它所做的事情选读"><a class="anchor" href="#从feature_extractor的返回值查看它所做的事情选读">#</a> 从 feature_extractor 的返回值查看它所做的事情（选读）</h3><pre><code>img1 = train_ds[1]['image']
+img2 = train_ds[2]['image']
+
+anno1 = train_ds[1]['annotation']
+anno2 = train_ds[2]['annotation']
+</code></pre><pre><code>res = feature_extractor(img1, anno1)
+res.keys()  # dict_keys(['pixel_values', 'labels'])
+
+pixel_values = res['pixel_values']
+len(pixel_values) # 1 
+# pixel_values 是一个列表，说明feature_extractor是进行批处理的，将每个图像处理的结果整合成一个列表
+
+# feature_extractor调整了图像的大小，因为模型只能接受固定大小的图片吧
+pixel_values[0].shape # (3, 512, 512)
+labels[0].shape # (512, 512)
+
+# feature_extractor 更改了图片中的像素值，应该是对图片进行了某种处理（类似卷积池化等操作吧）
+torch.from_numpy(np.array(anno1)).max() # tensor(82, dtype=torch.uint8)
+torch.from_numpy(np.array(pixel_values[0])).max() # tensor(2.6400)
+</code></pre><p>批处理时</p><pre><code>res = feature_extractor([img1, img2], [anno1, anno2])
+</code></pre><h3 id="train"><a class="anchor" href="#train">#</a> Train</h3><p>使用 AutoModelForSemanticSegmentation 加载 SegFormer，并向模型传递标签 ID 和标签类之间的映射：</p><pre><code>from transformers import AutoModelForSemanticSegmentation
+
+pretrained_model_name = &quot;nvidia/mit-b0&quot;
+model = AutoModelForSemanticSegmentation.from_pretrained(
+    pretrained_model_name, id2label=id2label, label2id=label2id
+)
+</code></pre><p>在 TrainingArguments 中定义训练超参数。重要的是不要删除未使用的列，因为这会删除 image 列。如果没有 image 列，则无法创建 pixel_values。设置 remove_unused_columns=False 为防止此行为</p><p>若要将命名空间下的模型保存并推送到 Hub，请设置 push_to_hub=True</p><pre><code>from transformers import TrainingArguments
+
+training_args = TrainingArguments(
+    output_dir=&quot;segformer-b0-scene-parse-150&quot;,
+    learning_rate=6e-5,
+    num_train_epochs=50,
+    per_device_train_batch_size=2,
+    per_device_eval_batch_size=2,
+    save_total_limit=3,
+    evaluation_strategy=&quot;steps&quot;,
+    save_strategy=&quot;steps&quot;,
+    save_steps=20,
+    eval_steps=20,
+    logging_steps=1,
+    eval_accumulation_steps=5,
+    remove_unused_columns=False,
+    push_to_hub=True,
+)
+</code></pre><p>若要在训练期间评估模型性能，需要创建一个函数来计算和报告指标。对于语义分割，通常计算平均并集交点 mean Intersection over Union （IoU）。平均 IoU 测量预测和地面实况分割地图之间的重叠区域。</p><p>从 Evaluate 库加载平均 IoU：</p><pre><code>import evaluate
+
+metric = evaluate.load(&quot;mean_iou&quot;)
+</code></pre><p>然后创建一个函数来计算指标。您的预测需要先转换为 logits，然后重新调整大小以匹配标签的大小，然后才能调用计算：</p><pre><code>def compute_metrics(eval_pred):
+    with torch.no_grad():
+        logits, labels = eval_pred
+        logits_tensor = torch.from_numpy(logits)
+        logits_tensor = nn.functional.interpolate(
+            logits_tensor,
+            size=labels.shape[-2:],
+            mode=&quot;bilinear&quot;,
+            align_corners=False,
+        ).argmax(dim=1)
+
+        pred_labels = logits_tensor.detach().cpu().numpy()
+        metrics = metric.compute(
+            predictions=pred_labels,
+            references=labels,
+            num_labels=num_labels,
+            ignore_index=255,
+            reduce_labels=False,
+        )
+        for key, value in metrics.items():
+            if type(value) is np.ndarray:
+                metrics[key] = value.tolist()
+        return metrics
+</code></pre><p>将模型、训练参数、数据集和指标函数传递给 Trainer:：</p><pre><code>from transformers import Trainer
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_ds,
+    eval_dataset=test_ds,
+    compute_metrics=compute_metrics,
+)
+</code></pre><h3 id="inference-推理"><a class="anchor" href="#inference-推理">#</a> Inference 推理</h3><p>加载图像以进行推理：</p><pre><code>image = ds[0][&quot;image&quot;]
+image
+</code></pre><p>使用特征提取器处理图像，并将 pixel_values 置于 GPU 上</p><pre><code>device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)  # use GPU if available, otherwise use a CPU
+encoding = feature_extractor(image, return_tensors=&quot;pt&quot;)
+pixel_values = encoding.pixel_values.to(device)
+</code></pre><p>将输入传递给模型并返回 logits</p><pre><code>outputs = model(pixel_values=pixel_values)
+logits = outputs.logits.cpu()
+</code></pre><p>查看 outputs</p><p><img data-src="/./images/%E8%AF%AD%E4%B9%89%E5%88%86%E9%9A%94/1662461068274.png" alt="1662461068274"></p><p>查看 logits</p><p>logits 已经是 tensor 类型了</p><pre><code>logits.shape # torch.Size([1, 150, 128, 128])
+
+logits.dtype # torch.float32
+</code></pre><p>第二维度的 150 正好对应上面所述的 150 种 label 类别，对应位置上的值应该类似是该点所属类别的概率，（但是奇怪的是每个位置上的 150 个值进行求和，所得结果却不是 1，无论是对 logits 还是 upsampled_logits），</p><figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre>l <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="2"></td><td><pre><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">150</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="3"></td><td><pre>    l<span class="token punctuation">.</span>append<span class="token punctuation">(</span>logits<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token builtin">sum</span> <span class="token operator">=</span> <span class="token number">0</span></pre></td></tr><tr><td data-num="6"></td><td><pre><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>l<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span></pre></td></tr><tr><td data-num="7"></td><td><pre>    <span class="token builtin">sum</span> <span class="token operator">+=</span> l<span class="token punctuation">[</span>i<span class="token punctuation">]</span></pre></td></tr><tr><td data-num="8"></td><td><pre></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">sum</span><span class="token punctuation">)</span></pre></td></tr></table></figure><p>接下来，将 logits 重新缩放到原始映像大小：</p><pre><code>upsampled_logits = nn.functional.interpolate(
+    logits,
+    size=image.size[::-1],
+    mode=&quot;bilinear&quot;,
+    align_corners=False,
+)
+
+pred_seg = upsampled_logits.argmax(dim=1)[0]
+</code></pre><p>若要可视化结果，请加载将每个类映射到其 RGB 值的数据集调色板。然后，您可以组合并绘制图像和预测分割图：</p><pre><code>import matplotlib.pyplot as plt
+
+color_seg = np.zeros((pred_seg.shape[0], pred_seg.shape[1], 3), dtype=np.uint8)
+palette = np.array(ade_palette())
+for label, color in enumerate(palette):
+    color_seg[pred_seg == label, :] = color
+color_seg = color_seg[..., ::-1]  # convert to BGR
+
+img = np.array(image) * 0.5 + color_seg * 0.5  # plot the image with the segmentation map
+img = img.astype(np.uint8)
+
+plt.figure(figsize=(15, 10))
+plt.imshow(img)
+plt.show()
+</code></pre><p>上面的 ade_palette 不知道从哪里来的</p></div><footer><div class="meta"><span class="item"><span class="icon"><i class="ic i-calendar-check"></i> </span><span class="text">更新于</span> <time title="修改时间：2022-09-07 16:38:57" itemprop="dateModified" datetime="2022-09-07T16:38:57+08:00">2022-09-07</time></span></div><div class="reward"><button><i class="ic i-heartbeat"></i> 赞赏</button><p>请我喝[茶]~(￣▽￣)~*</p><div id="qr"><div><img data-src="/images/wechatpay.png" alt="yuan 微信支付"><p>微信支付</p></div><div><img data-src="/images/alipay.png" alt="yuan 支付宝"><p>支付宝</p></div><div><img data-src="/images/paypal.png" alt="yuan 贝宝"><p>贝宝</p></div></div></div><div id="copyright"><ul><li class="author"><strong>本文作者： </strong>yuan <i class="ic i-at"><em>@</em></i>yuan</li><li class="link"><strong>本文链接：</strong> <a href="https://huang-junyuan.github.io/2022/08/25/ai/cv/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" title="语义分割">https://huang-junyuan.github.io/2022/08/25/ai/cv/语义分割/</a></li><li class="license"><strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！</li></ul></div></footer></article></div><div class="post-nav"><div class="item left"><a href="/2022/08/25/ai/nlp/nlp%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giclh5u05ej20zk0m87df.jpg" title="nlp的数据集"><span class="type">上一篇</span> <span class="category"><i class="ic i-flag"></i> nlp</span><h3>nlp的数据集</h3></a></div><div class="item right"><a href="/2022/08/25/ai/base/Evaluation-metrics-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gipeyvx1d4j20zk0m8hdt.jpg" title="Evaluation metrics——机器学习中常见的评估指标"><span class="type">下一篇</span> <span class="category"><i class="ic i-flag"></i> ai</span><h3>Evaluation metrics——机器学习中常见的评估指标</h3></a></div></div><div class="wrap" id="comments"></div></div><div id="sidebar"><div class="inner"><div class="panels"><div class="inner"><div class="contents panel pjax" data-title="文章目录"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#huggingface"><span class="toc-number">1.</span> <span class="toc-text">huggingface</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#load-sceneparse150-dataset"><span class="toc-number">1.1.</span> <span class="toc-text">Load SceneParse150 dataset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#preprocess"><span class="toc-number">1.2.</span> <span class="toc-text">Preprocess</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8Efeature_extractor%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC%E6%9F%A5%E7%9C%8B%E5%AE%83%E6%89%80%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85%E9%80%89%E8%AF%BB"><span class="toc-number">1.3.</span> <span class="toc-text">从 feature_extractor 的返回值查看它所做的事情（选读）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#train"><span class="toc-number">1.4.</span> <span class="toc-text">Train</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inference-%E6%8E%A8%E7%90%86"><span class="toc-number">1.5.</span> <span class="toc-text">Inference 推理</span></a></li></ol></li></ol></div><div class="related panel pjax" data-title="系列文章"><ul><li><a href="/2022/07/21/ai/cv/OpenCV%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B/" rel="bookmark" title="OpenCV轮廓检测">OpenCV轮廓检测</a></li><li><a href="/2022/07/21/ai/cv/ncnn%E5%9C%A8window%EF%BC%8Cvs2019%EF%BC%8Ccmake-3-16-5-win64-x64%E7%BC%96%E8%AF%91/" rel="bookmark" title="ncnn在window，vs2019，cmake-3.16.5-win64-x64编译">ncnn在window，vs2019，cmake-3.16.5-win64-x64编译</a></li><li><a href="/2022/07/21/ai/cv/OpenCV%E6%95%99%E7%A8%8B/" rel="bookmark" title="OpenCV教程">OpenCV教程</a></li><li><a href="/2022/07/22/ai/cv/ncnn%E5%92%8Copencv%E5%9C%A8vs2022%E4%B8%8A%E5%88%9B%E5%BB%BA%E5%B7%A5%E7%A8%8B%E6%8E%A8%E7%90%86%E7%A4%BA%E4%BE%8B/" rel="bookmark" title="ncnn和opencv在vs2022上创建工程推理示例">ncnn和opencv在vs2022上创建工程推理示例</a></li><li><a href="/2022/08/24/ai/cv/face-alignment%EF%BC%9Aface-alignment%E5%BA%93%E7%9A%84%E7%AE%80%E4%BB%8B%E3%80%81%E5%AE%89%E8%A3%85%E3%80%81%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" rel="bookmark" title="face_alignment：face_alignment库的简介、安装、使用方法">face_alignment：face_alignment库的简介、安装、使用方法</a></li><li><a href="/2022/08/24/ai/cv/%E7%AE%80%E5%8D%95%E8%AE%A1%E7%AE%97%E5%9B%BE%E7%89%87%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E5%9D%87%E5%80%BC%E5%92%8C%E6%96%B9%E5%B7%AE/" rel="bookmark" title="简单计算图片数据集的均值和方差">简单计算图片数据集的均值和方差</a></li><li><a href="/2022/08/25/ai/cv/GAN/" rel="bookmark" title="GAN">GAN</a></li><li><a href="/2022/08/25/ai/cv/MobileNet/" rel="bookmark" title="MobileNet">MobileNet</a></li><li class="active"><a href="/2022/08/25/ai/cv/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" rel="bookmark" title="语义分割">语义分割</a></li><li><a href="/2022/09/07/ai/cv/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" rel="bookmark" title="图像分类">图像分类</a></li></ul></div><div class="overview panel" data-title="站点概览"><div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="image" itemprop="image" alt="yuan" data-src="/images/avatar.jpg"><p class="name" itemprop="name">yuan</p><div class="description" itemprop="description"></div></div><nav class="state"><div class="item posts"><a href="/archives/"><span class="count">121</span> <span class="name">文章</span></a></div><div class="item categories"><a href="/categories/"><span class="count">23</span> <span class="name">分类</span></a></div><div class="item tags"><a href="/tags/"><span class="count">37</span> <span class="name">标签</span></a></div></nav><div class="social"><span class="exturl item email" data-url="bWFpbHRvOjIwODM2MzU1MjVAcXEuY29t" title="mailto:2083635525@qq.com"><i class="ic i-envelope"></i></span></div><ul class="menu"><li class="item"><a href="/" rel="section"><i class="ic i-home"></i>首页</a></li><li class="item"><a href="/about/" rel="section"><i class="ic i-user"></i>关于</a></li><li class="item dropdown"><a href="javascript:void(0);"><i class="ic i-feather"></i>文章</a><ul class="submenu"><li class="item"><a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a></li><li class="item"><a href="/categories/" rel="section"><i class="ic i-th"></i>分类</a></li><li class="item"><a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a></li></ul></li></ul></div></div></div><ul id="quick"><li class="prev pjax"><a href="/2022/08/25/ai/nlp/nlp%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a></li><li class="up"><i class="ic i-arrow-up"></i></li><li class="down"><i class="ic i-arrow-down"></i></li><li class="next pjax"><a href="/2022/08/25/ai/base/Evaluation-metrics-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a></li><li class="percent"></li></ul></div></div><div class="dimmer"></div></div></main><footer id="footer"><div class="inner"><div class="widgets"><div class="rpost pjax"><h2>随机文章</h2><ul><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/cv/" title="分类于 cv">cv</a></div><span><a href="/2022/07/21/ai/cv/OpenCV%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B/" title="OpenCV轮廓检测">OpenCV轮廓检测</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/pytorch/" title="分类于 pytorch">pytorch</a></div><span><a href="/2022/08/24/ai/pytorch/Pytorch%E7%9A%84data-norm%EF%BC%88%E5%87%A0%E7%A7%8D%E8%8C%83%E6%95%B0-norm-%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%EF%BC%89/" title="Pytorch的data.norm（几种范数(norm)的详细介绍）">Pytorch的data.norm（几种范数(norm)的详细介绍）</a></span></li><li class="item"><div class="breadcrumb"></div><span><a href="/2022/08/29/test/hello-world/" title="Hello World">Hello World</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/cv/" title="分类于 cv">cv</a></div><span><a href="/2022/08/25/ai/cv/MobileNet/" title="MobileNet">MobileNet</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/Python/" title="分类于 Python">Python</a></div><span><a href="/2022/08/24/language/python/Python%E6%A8%A1%E5%9D%97-shutil%E6%A8%A1%E5%9D%97%E8%AF%A6%E8%A7%A3/" title="Python模块-shutil模块详解">Python模块-shutil模块详解</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6/" title="分类于 计算机科学">计算机科学</a></div><span><a href="/2022/08/24/computer-science/algorithm/base/%E7%AE%97%E6%B3%951/" title="算法1">算法1</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/pytorch/" title="分类于 pytorch">pytorch</a></div><span><a href="/2022/08/24/ai/pytorch/torchvision-datasets-ImageFolder/" title="torchvision.datasets.ImageFolder">torchvision.datasets.ImageFolder</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/pytorch/" title="分类于 pytorch">pytorch</a></div><span><a href="/2022/07/22/ai/pytorch/pytorch%E5%85%A5%E9%97%A8/" title="pytorch入门">pytorch入门</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/pytorch/" title="分类于 pytorch">pytorch</a></div><span><a href="/2022/07/25/ai/pytorch/argmax-torch/" title="argmax-torch">argmax-torch</a></span></li><li class="item"><div class="breadcrumb"></div><span><a href="/2022/09/03/frontend/javascript/JavaScript%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86/" title="未命名">未命名</a></span></li></ul></div><div><h2>最新评论</h2><ul class="leancloud-recent-comment"></ul></div></div><div class="status"><div class="copyright">&copy; 2010 – <span itemprop="copyrightYear">2022</span> <span class="with-love"><i class="ic i-sakura rotate"></i> </span><span class="author" itemprop="copyrightHolder">yuan @ Mi Manchi</span></div><div class="count"><span class="post-meta-item-icon"><i class="ic i-chart-area"></i> </span><span title="站点总字数">843k 字</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="ic i-coffee"></i> </span><span title="站点阅读时长">12:47</span></div><div class="powered-by">基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span></div></div></div></footer></div><script data-config type="text/javascript">var LOCAL={path:"2022/08/25/ai/cv/语义分割/",favicon:{show:"（●´3｀●）やれやれだぜ",hide:"(´Д｀)大変だ！"},search:{placeholder:"文章搜索",empty:"关于 「 ${query} 」，什么也没搜到",stats:"${time} ms 内找到 ${hits} 条结果"},valine:!0,copy_tex:!0,katex:!0,fancybox:!0,copyright:'复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',ignores:[function(e){return e.includes("#")},function(e){return new RegExp(LOCAL.path+"$").test(e)}]}</script><script src="https://cdn.polyfill.io/v2/polyfill.js"></script><script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script><script src="/js/app.js?v=0.2.5"></script></body></html>
