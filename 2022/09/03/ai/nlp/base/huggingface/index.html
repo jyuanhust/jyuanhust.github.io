@@ -1,0 +1,1054 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#FFF"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"><link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="alternate" type="application/rss+xml" title="yuan" href="https://huang-junyuan.github.io/rss.xml"><link rel="alternate" type="application/atom+xml" title="yuan" href="https://huang-junyuan.github.io/atom.xml"><link rel="alternate" type="application/json" title="yuan" href="https://huang-junyuan.github.io/feed.json"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext"><link rel="stylesheet" href="/css/app.css?v=0.2.5"><link rel="canonical" href="https://huang-junyuan.github.io/2022/09/03/ai/nlp/base/huggingface/"><title>| Mi Manchi = yuan = Whatever is worth doing at all is worth doing well</title><meta name="generator" content="Hexo 6.2.0"></head><body itemscope itemtype="http://schema.org/WebPage"><div id="loading"><div class="cat"><div class="body"></div><div class="head"><div class="face"></div></div><div class="foot"><div class="tummy-end"></div><div class="bottom"></div><div class="legs left"></div><div class="legs right"></div></div><div class="paw"><div class="hands left"></div><div class="hands right"></div></div></div></div><div id="container"><header id="header" itemscope itemtype="http://schema.org/WPHeader"><div class="inner"><div id="brand"><div class="pjax"><h1 itemprop="name headline"></h1><div class="meta"><span class="item" title="创建时间：2022-09-03 17:32:59"><span class="icon"><i class="ic i-calendar"></i> </span><span class="text">发表于</span> <time itemprop="dateCreated datePublished" datetime="2022-09-03T17:32:59+08:00">2022-09-03</time> </span><span class="item" title="本文字数"><span class="icon"><i class="ic i-pen"></i> </span><span class="text">本文字数</span> <span>61k</span> <span class="text">字</span> </span><span class="item" title="阅读时长"><span class="icon"><i class="ic i-clock"></i> </span><span class="text">阅读时长</span> <span>55 分钟</span></span></div></div></div><nav id="nav"><div class="inner"><div class="toggle"><div class="lines" aria-label="切换导航栏"><span class="line"></span> <span class="line"></span> <span class="line"></span></div></div><ul class="menu"><li class="item title"><a href="/" rel="start">Mi Manchi</a></li></ul><ul class="right"><li class="item theme"><i class="ic i-sun"></i></li><li class="item search"><i class="ic i-search"></i></li></ul></div></nav></div><div id="imgs" class="pjax"><ul><li class="item" data-background-image="https://tva1.sinaimg.cn/large/6833939bly1gicitspjpbj20zk0m81ky.jpg"></li><li class="item" data-background-image="https://tva1.sinaimg.cn/large/6833939bly1giciukx8a7j20zk0m8aio.jpg"></li><li class="item" data-background-image="https://tva1.sinaimg.cn/large/6833939bly1giciuja1j1j20zk0m8kjl.jpg"></li><li class="item" data-background-image="https://tva1.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li><li class="item" data-background-image="https://tva1.sinaimg.cn/large/6833939bly1gipexbei4hj20zk0m8npd.jpg"></li><li class="item" data-background-image="https://tva1.sinaimg.cn/large/6833939bly1giclj9410cj20zk0m8h12.jpg"></li></ul></div></header><div id="waves"><svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs><g class="parallax"><use xlink:href="#gentle-wave" x="48" y="0"/><use xlink:href="#gentle-wave" x="48" y="3"/><use xlink:href="#gentle-wave" x="48" y="5"/><use xlink:href="#gentle-wave" x="48" y="7"/></g></svg></div><main><div class="inner"><div id="main" class="pjax"><div class="article wrap"><div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList"><i class="ic i-home"></i> <span><a href="/">首页</a></span></div><article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN"><link itemprop="mainEntityOfPage" href="https://huang-junyuan.github.io/2022/09/03/ai/nlp/base/huggingface/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/images/avatar.jpg"><meta itemprop="name" content="yuan"><meta itemprop="description" content="Whatever is worth doing at all is worth doing well, "></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="yuan"></span><div class="body md" itemprop="articleBody"><p>从广义上讲，它们可以分为三类</p><ul><li>GPT-like (also called auto-regressive Transformer models)</li><li>BERT-like (also called auto-encoding Transformer models)</li><li>BART/T5-like (also called sequence-to-sequence Transformer models)</li></ul><p>上面提到的所有 Transformer 模型（GPT，BERT，BART，T5 等）都已作为语言模型进行训练。这意味着他们已经以自我监督的方式接受了大量原始文本的培训。自我监督学习是一种训练类型，其中目标从模型的输入中自动计算出来。这意味着不需要人类来标记数据</p><p>这种类型的模型发展了对它所训练的语言的统计理解，但它对于特定的实际任务并不是很有用。因此，一般的预训练模型然后经历一个称为迁移学习的过程。在此过程中，模型以监督方式进行微调 - 即使用人工注释的标签 - 针对给定任务。</p><p>任务的一个例子是在阅读了前 n 个单词后预测句子中的下一个单词。这称为因果语言建模 causal language modeling，因为输出取决于过去和现在的输入，而不是未来的输入。</p><p><img data-src="/./images/huggingface/1662197883796.png" alt="1662197883796"></p><p>另一个例子是掩码语言建模 masked language modeling，其中模型预测句子中被掩蔽的单词。</p><p><img data-src="/./images/huggingface/1662197913951.png" alt="1662197913951"></p><p>预训练 Pretraining 是从头开始训练模型的行为：权重被随机初始化，训练在没有任何先验知识的情况下开始。</p><p><img data-src="/./images/huggingface/1662198101209.png" alt="1662198101209"></p><p>另一方面，微调是在预先训练模型后完成的训练。若要执行微调，请首先获取预训练的语言模型，然后使用特定于任务的数据集执行其他训练。等等 - 为什么不直接为最终任务进行训练呢？有几个原因：</p><ul><li>预训练模型已经在与微调数据集有一些相似之处的数据集上进行训练。因此，微调过程能够利用初始模型在预训练期间获得的知识（例如，对于 NLP 问题，预训练的模型将对您用于任务的语言具有某种统计理解）。</li><li>由于预训练模型已经在大量数据上进行训练，因此微调需要更少的数据来获得体面的结果。</li><li>出于同样的原因，获得良好结果所需的时间和资源要少得多。</li></ul><p>例如，可以利用在英语上训练的预训练模型，然后在 arXiv 语料库上对其进行微调，从而产生基于科学 / 研究的模型。微调只需要有限数量的数据：预训练模型获得的知识是 “转移的”，因此称为迁移学习。</p><p><img data-src="/./images/huggingface/1662198301156.png" alt="1662198301156"></p><p>一般结构</p><p>该模型主要由两个块组成：</p><ul><li>编码器（左）：编码器接收输入并构建输入的表示（其特征）。这意味着模型经过优化，可以从输入中获取理解。</li><li>解码器（右）：解码器使用编码器的表示（特征）以及其他输入来生成目标序列。这意味着模型已针对生成输出进行了优化。</li></ul><p><img data-src="/./images/huggingface/1662198517135.png" alt="1662198517135"></p><p>这些部分中的每一个都可以独立使用，具体取决于任务：</p><ul><li>仅编码器模型：适用于需要了解输入的任务，例如句子分类和命名实体识别。</li><li>仅解码器模型：适用于生成任务，如文本生成。</li><li>编码器 - 解码器模型或序列到序列模型：适用于需要输入的生成任务，如翻译或汇总 summarization。</li></ul><p>Attention layers</p><p>在处理每个单词的表示时，该层将告诉模型特别注意您传递的句子中的某些单词（并且或多或少忽略其他单词）。</p><p>要将此置于上下文中，请考虑将文本从英语翻译成法语的任务。给定输入 “You like this course”,，翻译模型还需要注意相邻的单词 “You” 才能获得单词 “like” 的正确翻译，因为在法语中，动词 “like” 根据主语的不同而有不同的共轭。然而，句子的其余部分对该词的翻译没有用处。同样，在翻译 “this” 时，模型也需要注意 “course” 这个词，因为 “this” 的翻译方式不同，这取决于相关的名词是阳性还是阴性。同样，句子中的其他单词对于 “this” 的翻译无关紧要。对于更复杂的句子（和更复杂的语法规则），模型需要特别注意句子中可能出现的更远的单词，以正确翻译每个单词。</p><p>The original architecture</p><p>The Transformer 架构最初是为翻译而设计的。在训练期间，编码器接收特定语言的输入（句子），而解码器接收所需目标语言的相同句子。在编码器中，注意力层可以使用句子中的所有单词（因为正如我们刚刚看到的，给定单词的翻译可以取决于句子中它之后和之前的内容）。然而，解码器是按顺序工作的，只能注意它已经翻译的句子中的单词（因此，只有当前生成的单词之前的单词）。例如，当我们预测了翻译目标的前三个单词时，我们将它们交给解码器，然后解码器使用编码器的所有输入来尝试预测第四个单词。</p><p>为了在训练期间加快速度（当模型可以访问目标句子时），解码器被输入整个目标，但不允许使用未来的单词（如果在尝试预测位置 2 的单词时可以访问位置 2 的单词，那么问题不会很难！例如，当尝试预测第四个单词时，注意力层将只能访问位置 1 到 3 中的单词。</p><p>原始的 Transformer 架构如下所示，左侧是编码器，右侧是解码器：</p><p><img data-src="/./images/huggingface/1662199071924.png" alt="1662199071924"></p><p>请注意，解码器块中的第一个注意层关注解码器的所有（过去）输入，但第二个注意层使用编码器的输出。因此，它可以访问整个输入句子，以最好地预测当前单词。这非常有用，因为不同的语言可以具有语法规则，将单词按不同的顺序排列，或者句子后面提供的某些上下文可能有助于确定给定单词的最佳翻译。</p><p>The attention mask 还可以在编码器 / 解码器中使用，以防止模型注意某些特殊单词 - 例如，在批处理句子时用于使所有输入具有相同长度的特殊填充词。</p><p>Architectures vs. checkpoints</p><p>Architecture: This is the skeleton of the model — the definition of each layer and each operation that happens within the model. 是模型的骨架 - 每个层的定义以及模型中发生的每个操作。<br>Checkpoints: These are the weights that will be loaded in a given architecture. 这些是将在给定体系结构中加载的权重。<br>Model: This is an umbrella term that isn’t as precise as “architecture” or “checkpoint”: it can mean both. This course will specify architecture or checkpoint when it matters to reduce ambiguity. 这是一个总括性术语，不如 “架构” 或 “检查点” 精确：它可以表示两者。本课程将在需要减少歧义时指定架构或检查点。</p><p>Encoder models</p><p>编码器模型仅使用转换器模型的编码器。在每个阶段，注意力层可以访问初始句子中的所有单词。这些模型通常被描述为具有 “双向” 注意，并且通常称为自动编码模型。</p><p>这些模型的预训练通常围绕着以某种方式破坏给定的句子（例如，通过屏蔽其中的随机单词）并让模型找到或重建初始句子。</p><p>编码器模型最适合需要了解完整句子的任务，例如句子分类、命名实体识别（以及更一般的单词分类）和提取式问答。</p><p>该系列型号的代表包括：</p><p>ALBERT<br>BERT<br>DistilBERT<br>ELECTRA<br>RoBERTa</p><p>Decoder models</p><p>解码器模型仅使用转换器模型的解码器。在每个阶段，对于给定的单词，注意力层只能访问句子中位于它前面的单词。这些模型通常称为自回归模型。</p><p>解码器模型的预训练通常围绕着预测句子中的下一个单词。</p><p>这些模型最适合于涉及文本生成的任务。</p><p>该系列型号的代表包括：</p><p>CTRL<br>GPT<br>GPT-2<br>Transformer XL</p><p>Sequence-to-sequence models</p><p>编码器 - 解码器模型（也称为序列到序列模型）使用转换器体系结构的两个部分。在每个阶段，编码器的注意力层可以访问初始句子中的所有单词，而解码器的注意力层只能访问输入中给定单词之前的单词。</p><p>这些模型的预训练可以使用编码器或解码器模型的目标来完成，但通常涉及更复杂的事情。例如，T5 的预训练是通过将文本的随机跨度（可以包含多个单词）替换为单个掩码特殊单词，然后目标是预测此掩码单词替换的文本。</p><p>序列到序列模型最适合于围绕根据给定输入生成新句子的任务，例如摘要、翻译或生成式问答。</p><p>Representatives of this family of models include:</p><p>BART<br>mBART<br>Marian<br>T5</p><p>Bias and limitations</p><p>如果您的目的是在生产中使用预训练模型或微调版本，请注意，虽然这些模型是功能强大的工具，但它们存在局限性。其中最大的问题是，为了能够对大量数据进行预训练，研究人员经常抓取他们能找到的所有内容，从互联网上获得的最佳和最差的内容进行抓取。</p><figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">from</span> transformers <span class="token keyword">import</span> pipeline</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>unmasker <span class="token operator">=</span> pipeline<span class="token punctuation">(</span><span class="token string">"fill-mask"</span><span class="token punctuation">,</span> model<span class="token operator">=</span><span class="token string">"bert-base-uncased"</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre>result <span class="token operator">=</span> unmasker<span class="token punctuation">(</span><span class="token string">"This man works as a [MASK]."</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="5"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span>r<span class="token punctuation">[</span><span class="token string">"token_str"</span><span class="token punctuation">]</span> <span class="token keyword">for</span> r <span class="token keyword">in</span> result<span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="6"></td><td><pre></pre></td></tr><tr><td data-num="7"></td><td><pre>result <span class="token operator">=</span> unmasker<span class="token punctuation">(</span><span class="token string">"This woman works as a [MASK]."</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="8"></td><td><pre><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span>r<span class="token punctuation">[</span><span class="token string">"token_str"</span><span class="token punctuation">]</span> <span class="token keyword">for</span> r <span class="token keyword">in</span> result<span class="token punctuation">]</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="9"></td><td><pre></pre></td></tr><tr><td data-num="10"></td><td><pre></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token punctuation">[</span><span class="token string">'lawyer'</span><span class="token punctuation">,</span> <span class="token string">'carpenter'</span><span class="token punctuation">,</span> <span class="token string">'doctor'</span><span class="token punctuation">,</span> <span class="token string">'waiter'</span><span class="token punctuation">,</span> <span class="token string">'mechanic'</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="12"></td><td><pre><span class="token punctuation">[</span><span class="token string">'nurse'</span><span class="token punctuation">,</span> <span class="token string">'waitress'</span><span class="token punctuation">,</span> <span class="token string">'teacher'</span><span class="token punctuation">,</span> <span class="token string">'maid'</span><span class="token punctuation">,</span> <span class="token string">'prostitute'</span><span class="token punctuation">]</span></pre></td></tr><tr><td data-num="13"></td><td><pre></pre></td></tr><tr><td data-num="14"></td><td><pre>result</pre></td></tr><tr><td data-num="15"></td><td><pre><span class="token punctuation">&#123;</span><span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">0.039145778864622116</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="16"></td><td><pre>  <span class="token string">'token'</span><span class="token punctuation">:</span> <span class="token number">7500</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="17"></td><td><pre>  <span class="token string">'token_str'</span><span class="token punctuation">:</span> <span class="token string">'farmer'</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="18"></td><td><pre>  <span class="token string">'sequence'</span><span class="token punctuation">:</span> <span class="token string">'this man works as a farmer.'</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="19"></td><td><pre> <span class="token punctuation">&#123;</span><span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">0.03280145302414894</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="20"></td><td><pre>  <span class="token string">'token'</span><span class="token punctuation">:</span> <span class="token number">6883</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="21"></td><td><pre>  <span class="token string">'token_str'</span><span class="token punctuation">:</span> <span class="token string">'businessman'</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="22"></td><td><pre>  <span class="token string">'sequence'</span><span class="token punctuation">:</span> <span class="token string">'this man works as a businessman.'</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="23"></td><td><pre> <span class="token punctuation">&#123;</span><span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">0.029292339459061623</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="24"></td><td><pre>  <span class="token string">'token'</span><span class="token punctuation">:</span> <span class="token number">3460</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="25"></td><td><pre>  <span class="token string">'token_str'</span><span class="token punctuation">:</span> <span class="token string">'doctor'</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="26"></td><td><pre>  <span class="token string">'sequence'</span><span class="token punctuation">:</span> <span class="token string">'this man works as a doctor.'</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span></pre></td></tr></table></figure><p>当被要求填写这两个句子中缺失的单词时，模型只给出了一个无性别的答案（服务员 / 女服务员）。其他的通常是与一个特定性别相关的工作职业 - 是的，最终进入了模特与 “女性” 和 “工作” 相关的前 5 种可能性。即使 BERT 是罕见的 Transformer 模型之一，而不是通过从互联网上抓取数据而构建的，而是使用明显中立的数据（它是在英语维基百科和 BookCorpus 数据集上训练的）构建的，也会发生这种情况。</p><p>因此，当您使用这些工具时，您需要牢记您正在使用的原始模型很容易产生性别歧视，种族主义或恐同内容。对数据进行微调模型不会使这种内在偏差消失。</p><p>Behind the pipeline</p><figure class="highlight python"><figcaption data-lang="python"></figcaption><table><tr><td data-num="1"></td><td><pre><span class="token keyword">from</span> transformers <span class="token keyword">import</span> pipeline</pre></td></tr><tr><td data-num="2"></td><td><pre></pre></td></tr><tr><td data-num="3"></td><td><pre>classifier <span class="token operator">=</span> pipeline<span class="token punctuation">(</span><span class="token string">"sentiment-analysis"</span><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="4"></td><td><pre>classifier<span class="token punctuation">(</span></pre></td></tr><tr><td data-num="5"></td><td><pre>    <span class="token punctuation">[</span></pre></td></tr><tr><td data-num="6"></td><td><pre>        <span class="token string">"I've been waiting for a HuggingFace course my whole life."</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="7"></td><td><pre>        <span class="token string">"I hate this so much!"</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="8"></td><td><pre>    <span class="token punctuation">]</span></pre></td></tr><tr><td data-num="9"></td><td><pre><span class="token punctuation">)</span></pre></td></tr><tr><td data-num="10"></td><td><pre></pre></td></tr><tr><td data-num="11"></td><td><pre><span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token string">'label'</span><span class="token punctuation">:</span> <span class="token string">'POSITIVE'</span><span class="token punctuation">,</span> <span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">0.9598047137260437</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span></pre></td></tr><tr><td data-num="12"></td><td><pre> <span class="token punctuation">&#123;</span><span class="token string">'label'</span><span class="token punctuation">:</span> <span class="token string">'NEGATIVE'</span><span class="token punctuation">,</span> <span class="token string">'score'</span><span class="token punctuation">:</span> <span class="token number">0.9994558095932007</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span></pre></td></tr></table></figure><p>pipeline 将三个步骤组合在一起：预处理、通过模型传递输入和后处理：</p><p><img data-src="/./images/huggingface/1662201412320.png" alt="1662201412320"></p><p>Preprocessing with a tokenizer</p><p>与其他神经网络一样，Transformer 模型不能直接处理原始文本，因此我们 pipeline 的第一步是将文本输入转换为模型可以理解的数字。为此，我们使用 tokenizer，它将负责：</p><p>将输入拆分为称为 tokens 的单词、子单词或符号（如标点符号）<br>将每个 tokens 映射到一个整数<br>添加可能对模型有用的其他输入</p><p>所有这些预处理都需要以与预训练模型时完全相同的方式完成，因此我们首先需要从模型中心下载该信息。为此，我们使用类 AutoTokenizer 及其方法 from_pretrained ()。使用我们模型的 checkpoint 名称，它将自动获取与模型的分词器关联的数据并将其缓存（因此仅在您第一次运行以下代码时下载）</p><p>Since the default checkpoint of the sentiment-analysis pipeline is distilbert-base-uncased-finetuned-sst-2-english (you can see its model card here), we run the following:</p><pre><code>from transformers import AutoTokenizer
+
+checkpoint = &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+</code></pre><p>一旦我们有了分词器，我们就可以直接将我们的句子传递给它，我们将得到一个字典，该字典已准备好提供给我们的模型！唯一要做的就是将输入 ID 列表转换为张量。</p><p>为了指定我们想要返回的张量类型（PyTorch，TensorFlow 或普通的 NumPy），我们使用参数：return_tensors</p><pre><code>raw_inputs = [
+    &quot;I've been waiting for a HuggingFace course my whole life.&quot;,
+    &quot;I hate this so much!&quot;,
+]
+inputs = tokenizer(raw_inputs, padding=True, truncation=True, return_tensors=&quot;pt&quot;)
+print(inputs)
+</code></pre><p>padding 填充 truncation 截断</p><p>以下是 PyTorch 张量的结果：</p><pre><code>&#123;
+    'input_ids': tensor([
+        [  101,  1045,  1005,  2310,  2042,  3403,  2005,  1037, 17662, 12172, 2607,  2026,  2878,  2166,  1012,   102],
+        [  101,  1045,  5223,  2023,  2061,  2172,   999,   102,     0,     0,     0,     0,     0,     0,     0,     0]
+    ]), 
+    'attention_mask': tensor([
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ])
+&#125;
+</code></pre><p>输出本身是一个包含两个键 input_ids 和 attention_mask 的字典。 input_ids 包含两行整数（每个句子一行），它们是每个句子中标记的唯一标识符。</p><p>Going through the model</p><p>Transformers 提供了一个 AutoModel 类，该类还具有一个方法：AutoModel.from_pretrained ()</p><pre><code>from transformers import AutoModel
+
+checkpoint = &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+model = AutoModel.from_pretrained(checkpoint)
+</code></pre><p><img data-src="/./images/huggingface/1662252586876.png" alt="1662252586876"></p><p>AutoModel 没有专门的头，加载模型时提示有些权重并没有被加载到模型中</p><p>此体系结构仅包含基本 Transformer 模块：给定一些输入，它输出我们称之为 hidden states 隐藏状态（也称为 features）的内容。对于每个模型输入，我们将检索一个高维向量，该向量表示 Transformer 模型对该输入的上下文理解。</p><p>虽然这些隐藏状态本身很有用，但它们通常是模型另一部分（称为头部）的输入。在第 1 章中，不同的任务可以使用相同的体系结构执行，但是这些任务中的每一个都有一个与之关联的不同头。</p><p>A high-dimensional vector?</p><p>Transformer 模块的矢量输出通常很大。它通常有三个维度：</p><p>Batch size 批大小：一次处理的序列数（在我们的示例中为 2）。<br>Sequence length: 序列长度：序列的数字表示形式的长度（在我们的示例中为 16）。</p><p>Hidden size 隐藏大小：每个模型输入的矢量维度。</p><p>它被称为 “高维”，因为最后一个值。隐藏大小可能非常大（768 对于较小的模型很常见，在较大的模型中，这可以达到 3072 或更多）。</p><pre><code>outputs = model(**inputs)
+print(outputs.last_hidden_state.shape)
+
+torch.Size([2, 16, 768])
+</code></pre><p>请注意，Transformers 模型的🤗输出的行为类似于 namedtuples or dictionaries。您可以通过属性（就像我们所做的那样）或按键（outputs [&quot;last_hidden_state&quot;])）甚至按索引访问元素，如果您确切地知道要查找的内容（outputs [0]）的位置，则可以访问元素。</p><p>Model heads: Making sense out of numbers</p><p>模型头将隐藏状态的高维向量作为输入，并将它们投影到不同的维度上。它们通常由一个或几个线性层组成：</p><p><img data-src="/./images/huggingface/1662205684113.png" alt="1662205684113"></p><p>Transformer 模型的输出直接发送到模型头进行处理。</p><p>在此图中，模型由其嵌入层和后续层表示。嵌入层将标记化输入中的每个输入 ID 转换为表示关联令牌的向量。随后的层使用注意力机制操纵这些向量，以产生句子的最终表示。</p><p><img data-src="/./images/huggingface/1662205892356.png" alt="1662205892356"></p><p>对于我们的示例，我们需要一个具有序列分类头的模型（以便能够将句子分类为正数或负数）。因此，我们实际上不会使用该类，而是 AutoModelForSequenceClassification</p><pre><code>from transformers import AutoModelForSequenceClassification
+
+checkpoint = &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+outputs = model(**inputs)
+</code></pre><p>模型加载时没有其他的提示信息</p><p>现在，如果我们看一下输入的形状，维度会低得多：模型头将我们之前看到的高维向量作为输入，并输出包含两个值的向量（每个标签一个）：</p><pre><code>print(outputs.logits.shape)
+
+torch.Size([2, 2])
+</code></pre><p>由于我们只有两个句子和两个标签，因此我们从模型中获得的结果是形状为 2 x 2。</p><p>Postprocessing the output</p><p>我们从模型中获得的输出值本身并不一定有意义。让我们来看看：</p><pre><code>print(outputs.logits)
+
+tensor([[-1.5607,  1.6123],
+        [ 4.1692, -3.3464]], grad_fn=&lt;AddmmBackward&gt;)
+</code></pre><p>我们的模型预测了第一句话和第二句话。这些不是概率，而是 logits，即模型最后一层输出的原始、非规范化分数。要转换为概率，它们需要经过 SoftMax 层（所有 Transformers 模型都🤗输出 logits，因为用于训练的损失函数通常会将最后一个激活函数（例如 SoftMax）与实际的损失函数（例如交叉熵）融合在一起）</p><pre><code>import torch
+
+predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)
+print(predictions)
+
+tensor([[4.0195e-02, 9.5980e-01],
+        [9.9946e-01, 5.4418e-04]], grad_fn=&lt;SoftmaxBackward&gt;)
+</code></pre><p>我们的模型预测了第一句话 [0.0402, 0.9598] 和第二句话 [0.9995, 0.0005] 。这些不是概率，而是 logits，即模型最后一层输出的原始、非规范化分数。要转换为概率，它们需要经过 SoftMax 层（所有 Transformers 模型都🤗输出 logits，因为用于训练的损失函数通常会将最后一个激活函数（例如 SoftMax）与实际的损失函数（例如交叉熵）融合在一起）：</p><p>要获得与每个位置对应的标签，我们可以检查模型配置的属性 id2label</p><pre><code>model.config.id2label
+
+&#123;0: 'NEGATIVE', 1: 'POSITIVE'&#125;
+</code></pre><p>ow we can conclude that the model predicted the following:</p><p>First sentence: NEGATIVE: 0.0402, POSITIVE: 0.9598<br>Second sentence: NEGATIVE: 0.9995, POSITIVE: 0.0005</p><p>Creating a Transformer</p><p>初始化 BERT 模型需要做的第一件事是加载一个配置对象：</p><pre><code>from transformers import BertConfig, BertModel
+
+# Building the config
+config = BertConfig()
+
+# Building the model from the config
+model = BertModel(config)
+</code></pre><p>该配置包含许多用于构建模型的属性：</p><pre><code>print(config)
+
+BertConfig &#123;
+  [...]
+  &quot;hidden_size&quot;: 768,
+  &quot;intermediate_size&quot;: 3072,
+  &quot;max_position_embeddings&quot;: 512,
+  &quot;num_attention_heads&quot;: 12,
+  &quot;num_hidden_layers&quot;: 12,
+  [...]
+&#125;
+</code></pre><p>Different loading methods</p><p>从默认配置创建模型会使用随机值对其进行初始化：</p><pre><code>from transformers import BertConfig, BertModel
+
+config = BertConfig()
+model = BertModel(config)
+
+# Model is randomly initialized!
+</code></pre><p>该模型可以在此状态下使用，但它会输出胡言乱语；它需要首先接受训练。我们可以在手头的任务上从头开始训练模型，但正如您在第 1 章中看到的那样，这将需要很长时间和大量数据，并且它将对环境产生不可忽视的影响。为了避免不必要和重复的工作，必须能够共享和重用已经过训练的模型。</p><p>加载已经训练的 Transformer 模型很简单 — 我们可以使用以下方法 from_pretrained () 执行此操作：from_pretrained ()</p><pre><code>from transformers import BertModel
+
+model = BertModel.from_pretrained(&quot;bert-base-cased&quot;)
+</code></pre><p>正如您之前看到的，我们可以用等效的类 AutoModel 替换 BertModel。从现在开始，我们将这样做，因为这会产生与 checkpoint 无关的代码；如果您的代码适用于一个 checkpoint，则它应该与另一个 checkpoint 无缝协作。即使体系结构不同，只要 checkpoint 是针对类似任务（例如，情绪分析任务）训练的，这也适用。</p><p>Saving methods</p><pre><code>model.save_pretrained(&quot;directory_on_my_computer&quot;)
+</code></pre><p>这会将两个文件保存到磁盘：</p><pre><code>ls directory_on_my_computer
+
+config.json pytorch_model.bin
+</code></pre><p>pytorch_model.bin 文件称为状态字典；它包含模型的所有权重。这两个文件是相辅相成的。配置对于了解模型的体系结构是必要的，而模型权重是模型的参数。</p><p>Using a Transformer model for inference 使用转换器模型进行推理</p><p>假设我们有几个序列</p><pre><code>sequences = [&quot;Hello!&quot;, &quot;Cool.&quot;, &quot;Nice!&quot;]
+</code></pre><p>分词器将这些转换为词汇索引，这些词汇表通常称为输入 ID。现在，每个序列都是一个数字列表！生成的输出为</p><pre><code>encoded_sequences = [
+    [101, 7592, 999, 102],
+    [101, 4658, 1012, 102],
+    [101, 3835, 999, 102],
+]
+</code></pre><p>这是编码序列的列表：列表的列表。张量只接受矩形形状（思考矩阵）。这个 “数组” 已经是矩形的，所以把它转换成张量很容易：</p><pre><code>import torch
+
+model_inputs = torch.tensor(encoded_sequences)
+</code></pre><p>Using the tensors as inputs to the model</p><p>While the model accepts a lot of different arguments, only the input IDs are necessary.</p><p>Tokenizers</p><p>分词器是 NLP 管道的核心组件之一。它们只有一个目的：将文本转换为可由模型处理的数据。模型只能处理数字，因此分词器需要将我们的文本输入转换为数字数据。</p><p>Word-based</p><p>我想到的第一种类型的分词器是基于单词的。它通常很容易设置和使用，只有几条规则，而且通常会产生不错的结果。例如，在下图中，目标是将原始文本拆分为单词，并为每个单词找到一个数字表示形式：</p><p><img data-src="/./images/huggingface/1662207591302.png" alt="1662207591302"></p><p>Character-based</p><p>Subword tokenization 子词标记化</p><p>子词标记化算法依赖于这样一个原则，即常用词不应拆分为较小的子词，但稀有词应分解为有意义的子词。</p><p>例如，“annoyingly” 可能被认为是一个罕见的词，可以分解为 “烦人” 和 “ly”。这两者都可能更频繁地作为独立的子词出现，而与此同时，“烦人地” 的含义被 “烦人” 和 “ly” 的复合含义所保留。</p><p>加载和保存</p><p>from_pretrained () 加载<br>save_pretrained () 保存</p><pre><code>from transformers import BertTokenizer
+
+tokenizer = BertTokenizer.from_pretrained(&quot;bert-base-cased&quot;)
+</code></pre><p>与 AutoModel 类似，该类 AutoTokenizer 将根据 checkpoint 名称在库中获取正确的分词器类，并且可以直接与任何检查点一起使用</p><pre><code>from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained(&quot;bert-base-cased&quot;)
+</code></pre><p>现在，我们可以使用分词器</p><pre><code>tokenizer(&quot;Using a Transformer network is simple&quot;)
+
+&#123;'input_ids': [101, 7993, 170, 11303, 1200, 2443, 1110, 3014, 102],
+ 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0],
+ 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1]&#125;
+</code></pre><p>保存分词器与保存模型相同：</p><pre><code>tokenizer.save_pretrained(&quot;directory_on_my_computer&quot;)
+</code></pre><p>Encoding 编码</p><p>将文本转换为数字称为编码。编码通过两个步骤完成：标记化，然后转换为输入 ID。</p><p>正如我们所看到的，第一步是将文本拆分为单词（或单词的一部分，标点符号等），通常称为标记。有多个规则可以控制该过程，这就是为什么我们需要使用模型的名称实例化分词器，以确保我们使用的规则与预先训练模型时使用的规则相同。</p><p>第二步是将这些令牌转换为数字，这样我们就可以从中构建一个张量并将它们提供给模型。为此，分词器具有一个词汇表，这是我们使用该方法实例化它时下载的部分。同样，我们需要使用与预训练模型时相同的词汇。from_pretrained ()</p><p>Tokenization<br>The tokenization process is done by the tokenize() method of the tokenizer:</p><pre><code>from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained(&quot;bert-base-cased&quot;)
+
+sequence = &quot;Using a Transformer network is simple&quot;
+tokens = tokenizer.tokenize(sequence)
+
+print(tokens)
+
+['Using', 'a', 'transform', '##er', 'network', 'is', 'simple']
+</code></pre><p>此分词器是子词分词器：它拆分单词，直到获得可由其词汇表表示的标记。这里的 transformer 情况就是 ，它被分成两个标记 transform and ##er.</p><p>From tokens to input IDs</p><p>到输入 ID 的转换由分词器方法 convert_tokens_to_ids () 处理</p><pre><code>ids = tokenizer.convert_tokens_to_ids(tokens)
+
+print(ids)
+[7993, 170, 11303, 1200, 2443, 1110, 3014]
+</code></pre><p>Decoding<br>解码正朝着相反的方向发展：从词汇索引中，我们想要得到一个字符串。这可以通过以下方式使用方法完成：decode ()</p><pre><code>decoded_string = tokenizer.decode([7993, 170, 11303, 1200, 2443, 1110, 3014])
+print(decoded_string)
+
+'Using a Transformer network is simple'
+</code></pre><p>请注意，该 decode 方法不仅将索引转换回标记，而且还将属于同一单词的标记组合在一起以生成可读的句子。当我们使用预测新文本（从提示生成的文本，或用于转换或摘要等序列到序列问题）的模型时，此行为将非常有用</p><p>Models expect a batch of inputs</p><p>Handling multiple sequences</p><pre><code>import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+checkpoint = &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence = &quot;I've been waiting for a HuggingFace course my whole life.&quot;
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+input_ids = torch.tensor(ids)
+# This line will fail.
+model(input_ids)
+
+IndexError: Dimension out of range (expected to be in range of [-1, 0], but got 1)
+</code></pre><p>问题在于，我们向模型发送了单个序列，而🤗变形金刚模型默认需要多个句子。在这里，当我们将分词器应用于时，我们尝试在幕后执行它所做的一切，但是如果您仔细观察，您会发现它不仅将输入 ID 列表转换为张量，而且还在其上添加了一个维度：sequence</p><pre><code>tokenized_inputs = tokenizer(sequence, return_tensors=&quot;pt&quot;)
+print(tokenized_inputs[&quot;input_ids&quot;])
+
+tensor([[  101,  1045,  1005,  2310,  2042,  3403,  2005,  1037, 17662, 12172,
+          2607,  2026,  2878,  2166,  1012,   102]])
+</code></pre><pre><code>import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+checkpoint = &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence = &quot;I've been waiting for a HuggingFace course my whole life.&quot;
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+
+input_ids = torch.tensor([ids])
+print(&quot;Input IDs:&quot;, input_ids)
+
+output = model(input_ids)
+print(&quot;Logits:&quot;, output.logits)
+
+Input IDs: [[ 1045,  1005,  2310,  2042,  3403,  2005,  1037, 17662, 12172,  2607, 2026,  2878,  2166,  1012]]
+Logits: [[-2.7276,  2.8789]]
+</code></pre><p>Padding the inputs</p><p>以下列表列表无法转换为张量：</p><pre><code>batched_ids = [
+    [200, 200, 200],
+    [200, 200]
+]
+</code></pre><p>为了解决这个问题，我们将使用填充来使我们的张量具有矩形形状。填充通过向具有较少值的句子添加一个称为填充标记 padding token 的特殊单词来确保我们的所有句子具有相同的长度。例如，如果您有 10 个包含 10 个单词的句子和 1 个包含 20 个单词的句子，则填充将确保所有句子包含 20 个单词。在我们的示例中，生成的张量如下所示：</p><pre><code>padding_id = 100
+
+batched_ids = [
+    [200, 200, 200],
+    [200, 200, padding_id],
+]
+</code></pre><p>填充令牌 ID 可在 tokenizer.pad_token_id 中找到。让我们使用它，通过模型单独发送我们的两个句子，并一起批处理：</p><pre><code>model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+
+sequence1_ids = [[200, 200, 200]]
+sequence2_ids = [[200, 200]]
+batched_ids = [
+    [200, 200, 200],
+    [200, 200, tokenizer.pad_token_id],
+]
+
+print(model(torch.tensor(sequence1_ids)).logits)
+print(model(torch.tensor(sequence2_ids)).logits)
+print(model(torch.tensor(batched_ids)).logits)
+
+tensor([[ 1.5694, -1.3895]], grad_fn=&lt;AddmmBackward&gt;)
+tensor([[ 0.5803, -0.4125]], grad_fn=&lt;AddmmBackward&gt;)
+tensor([[ 1.5694, -1.3895],
+        [ 1.3373, -1.2163]], grad_fn=&lt;AddmmBackward&gt;)
+</code></pre><p>这是因为 Transformer 模型的关键特征是将每个令牌上下文化 contextualize 的注意力层。这些将考虑填充标记，因为它们关注序列的所有标记。为了在通过模型传递不同长度的单个句子时，或者在传递具有相同句子并应用了填充的批处理时获得相同的结果，我们需要告诉这些注意层忽略填充标记。这是通过使用注意力掩码完成的。</p><p>Attention masks</p><p>注意力掩码是与输入 ID 张量形状完全相同的张量，填充有 0 和 1：1 表示应该注意相应的标记，0 表示不应注意相应的标记（即，它们应该被模型的注意力层忽略）。</p><pre><code>batched_ids = [
+    [200, 200, 200],
+    [200, 200, tokenizer.pad_token_id],
+]
+
+attention_mask = [
+    [1, 1, 1],
+    [1, 1, 0],
+]
+
+outputs = model(torch.tensor(batched_ids), attention_mask=torch.tensor(attention_mask))
+print(outputs.logits)
+
+tensor([[ 1.5694, -1.3895],
+        [ 0.5803, -0.4125]], grad_fn=&lt;AddmmBackward&gt;)
+</code></pre><p>Longer sequences</p><p>对于 Transformer 模型，我们可以传递模型的序列长度是有限制的。大多数模型处理最多 512 或 1024 个令牌的序列，当要求处理较长的序列时，这些序列会崩溃。此问题有两种解决方案：</p><p>使用具有较长的受支持序列长度的模型。<br>截断序列。</p><p>模型具有不同支持的序列长度，有些专门处理非常长的序列。Longformer 就是一个例子，另一个例子是 LED。如果您正在处理需要很长序列的任务，我们建议您查看这些模型</p><p>否则，我们建议您通过指定参数来截断序列：max_sequence_length</p><pre><code>sequence = sequence[:max_sequence_length]
+</code></pre><p>Putting it all together</p><p>在过去的几节中，我们一直在尽最大努力手工完成大部分工作。我们探讨了分词器的工作原理，并研究了分词化、转换为输入 ID、填充、截断和注意力掩码。</p><p>但是，正如我们在第 2 节中所看到的，🤗 Transformers API 可以通过一个高级函数为我们处理所有这些问题，我们将在这里深入探讨。当您直接调用句子时，您将获得准备通过模型传递的输入：tokenizer</p><pre><code>from transformers import AutoTokenizer
+
+checkpoint = &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+
+sequence = &quot;I've been waiting for a HuggingFace course my whole life.&quot;
+
+model_inputs = tokenizer(sequence)
+</code></pre><p>在这里，变量 model_inputs tokenizer 包含模型正常运行所需的所有内容。对于 DistilBERT，这包括输入 ID 以及注意力掩码。接受其他输入的其他模型也将具有对象 tokenizer 的这些输出。</p><p>正如我们将在下面的一些示例中看到的那样，此方法非常强大。首先，它可以标记单个序列：</p><pre><code>sequence = &quot;I've been waiting for a HuggingFace course my whole life.&quot;
+
+model_inputs = tokenizer(sequence)
+</code></pre><p>它还一次处理多个序列，API 中没有变化：</p><pre><code>sequences = [&quot;I've been waiting for a HuggingFace course my whole life.&quot;, &quot;So have I!&quot;]
+
+model_inputs = tokenizer(sequences)
+</code></pre><p>它可以根据几个目标进行填充：</p><pre><code># Will pad the sequences up to the maximum sequence length
+model_inputs = tokenizer(sequences, padding=&quot;longest&quot;)
+
+# Will pad the sequences up to the model max length
+# (512 for BERT or DistilBERT)
+model_inputs = tokenizer(sequences, padding=&quot;max_length&quot;)
+
+# Will pad the sequences up to the specified max length
+model_inputs = tokenizer(sequences, padding=&quot;max_length&quot;, max_length=8)
+
+</code></pre><p>它还可以截断序列：</p><pre><code>sequences = [&quot;I've been waiting for a HuggingFace course my whole life.&quot;, &quot;So have I!&quot;]
+
+# Will truncate the sequences that are longer than the model max length
+# (512 for BERT or DistilBERT)
+model_inputs = tokenizer(sequences, truncation=True)
+
+# Will truncate the sequences that are longer than the specified max length
+model_inputs = tokenizer(sequences, max_length=8, truncation=True)
+</code></pre><p>该 tokenizer 对象可以处理到特定框架张量的转换，然后可以直接将其发送到模型。例如，在下面的代码示例中，我们提示分词器从不同的框架返回张量 — &quot;pt&quot; 返回 PyTorch 张量，&quot;tf&quot; 返回 TensorFlow 张量，&quot;np&quot; 并返回 NumPy 数组：</p><pre><code>sequences = [&quot;I've been waiting for a HuggingFace course my whole life.&quot;, &quot;So have I!&quot;]
+
+# Returns PyTorch tensors
+model_inputs = tokenizer(sequences, padding=True, return_tensors=&quot;pt&quot;)
+
+# Returns TensorFlow tensors
+model_inputs = tokenizer(sequences, padding=True, return_tensors=&quot;tf&quot;)
+
+# Returns NumPy arrays
+model_inputs = tokenizer(sequences, padding=True, return_tensors=&quot;np&quot;)
+</code></pre><p>Special tokens</p><p>如果我们看一下分词器返回的输入 ID，我们会发现它们与我们之前的情况略有不同：</p><pre><code>sequence = &quot;I've been waiting for a HuggingFace course my whole life.&quot;
+
+model_inputs = tokenizer(sequence)
+print(model_inputs[&quot;input_ids&quot;])
+
+tokens = tokenizer.tokenize(sequence)
+ids = tokenizer.convert_tokens_to_ids(tokens)
+print(ids)
+</code></pre><p>在开头添加了一个令牌 ID，在末尾添加了一个令牌 ID。让我们解码上面的两个 ID 序列，看看这是关于什么的：</p><pre><code>print(tokenizer.decode(model_inputs[&quot;input_ids&quot;]))
+print(tokenizer.decode(ids))
+
+&quot;[CLS] i've been waiting for a huggingface course my whole life. [SEP]&quot;
+&quot;i've been waiting for a huggingface course my whole life.&quot;
+</code></pre><p>分词器在开头添加了特殊单词 [CLS]，在末尾添加了特殊单词 [SEP]。这是因为模型是用它们预先训练的，所以为了获得相同的推理结果，我们还需要添加它们。请注意，某些模型不会添加特殊单词，也不会添加不同的单词；模型也可以仅在开头添加这些特殊单词，或仅在末尾添加这些特殊单词。在任何情况下，分词器都知道哪些是预期的，并将为您处理此问题。</p><p>Wrapping up: From tokenizer to model 总结：从分词器到模型</p><p>现在我们已经看到了对象在应用于文本时使用的所有单个步骤，让我们最后一次看看它如何处理多个序列（填充！），很长的序列（截断！）以及多种类型的张量及其主 API：tokenizer</p><pre><code>import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+checkpoint = &quot;distilbert-base-uncased-finetuned-sst-2-english&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+sequences = [&quot;I've been waiting for a HuggingFace course my whole life.&quot;, &quot;So have I!&quot;]
+
+tokens = tokenizer(sequences, padding=True, truncation=True, return_tensors=&quot;pt&quot;)
+output = model(**tokens)
+</code></pre><p>处理数据</p><p>下面是我们如何在 PyTorch 中的一个批处理上训练一个序列分类器：</p><pre><code>import torch
+from transformers import AdamW, AutoTokenizer, AutoModelForSequenceClassification
+
+# Same as before
+checkpoint = &quot;bert-base-uncased&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+sequences = [
+    &quot;I've been waiting for a HuggingFace course my whole life.&quot;,
+    &quot;This course is amazing!&quot;,
+]
+batch = tokenizer(sequences, padding=True, truncation=True, return_tensors=&quot;pt&quot;)
+
+# This is new
+batch[&quot;labels&quot;] = torch.tensor([1, 1])
+
+optimizer = AdamW(model.parameters())
+loss = model(**batch).loss
+loss.backward()
+optimizer.step()
+</code></pre><p>当然，仅仅用两句话训练模型不会产生非常好的结果。为了获得更好的结果，您需要准备一个更大的数据集。</p><p>在本节中，我们将使用 MRPC（Microsoft Research Paraphrase Corpus）数据集作为示例，该数据集由 William B. Dolan 和 Chris Brockett 在一篇论文中介绍。该数据集由 5，801 对句子组成，带有一个标签，指示它们是否是释义（即，如果两个句子的含义相同）。我们在本章中选择了它，因为它是一个小数据集，所以很容易对其进行训练。</p><p>Loading a dataset from the Hub</p><p>数据集库提供了一个非常简单的命令，用于在 Hub 上下载和缓存数据集。我们可以像这样下载 MRPC 数据集：</p><pre><code>from datasets import load_dataset
+
+raw_datasets = load_dataset(&quot;glue&quot;, &quot;mrpc&quot;)
+raw_datasets
+
+DatasetDict(&#123;
+    train: Dataset(&#123;
+        features: ['sentence1', 'sentence2', 'label', 'idx'],
+        num_rows: 3668
+    &#125;)
+    validation: Dataset(&#123;
+        features: ['sentence1', 'sentence2', 'label', 'idx'],
+        num_rows: 408
+    &#125;)
+    test: Dataset(&#123;
+        features: ['sentence1', 'sentence2', 'label', 'idx'],
+        num_rows: 1725
+    &#125;)
+&#125;)
+
+</code></pre><p>如您所见，我们得到一个包含训练集、验证集和测试集的 DatasetDict 对象。其中每个都包含几列（sentence1，sentence2, label, and idx ） 和 num_rows 可变行数，这些行是每个集中的元素数（因此，训练集中有 3，668 对句子，验证集中有 408 对，测试集中有 1，725 对）。</p><p>我们可以通过索引来访问对象 raw_datasets 中的每对句子，就像使用字典一样</p><pre><code>raw_train_dataset = raw_datasets[&quot;train&quot;]
+raw_train_dataset[0]
+
+&#123;'idx': 0,
+ 'label': 1,
+ 'sentence1': 'Amrozi accused his brother , whom he called &quot; the witness &quot; , of deliberately distorting his evidence .',
+ 'sentence2': 'Referring to him as only &quot; the witness &quot; , Amrozi accused his brother of deliberately distorting his evidence .'&#125;
+</code></pre><p>我们可以看到标签已经是整数，因此我们不必在那里进行任何预处理。要知道哪个整数对应于哪个标签，我们可以检查我们的 features of our raw_train_dataset. 这将告诉我们每列的类型：</p><pre><code>raw_train_dataset.features
+
+&#123;'sentence1': Value(dtype='string', id=None),
+ 'sentence2': Value(dtype='string', id=None),
+ 'label': ClassLabel(num_classes=2, names=['not_equivalent', 'equivalent'], names_file=None, id=None),
+ 'idx': Value(dtype='int32', id=None)&#125;
+</code></pre><p>在后台，label 类型为 ClassLabel，整数到标签名称的映射存储在 names 文件夹中。 0 对应于 not_equivalent ， 1 并对应于 equivalent</p><p>Preprocessing a dataset</p><p>要预处理数据集，我们需要将文本转换为模型可以理解的数字。正如您在上一章中看到的，这是使用分词器完成的。我们可以向分词器提供一个句子或一系列句子，这样我们就可以直接标记每对的所有第一个句子和所有第二个句子</p><pre><code>from transformers import AutoTokenizer
+
+checkpoint = &quot;bert-base-uncased&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+tokenized_sentences_1 = tokenizer(raw_datasets[&quot;train&quot;][&quot;sentence1&quot;])
+tokenized_sentences_2 = tokenizer(raw_datasets[&quot;train&quot;][&quot;sentence2&quot;])
+</code></pre><p>但是，我们不能只是将两个序列传递给模型，然后预测这两个句子是否是释义。我们需要将这两个序列作为一对处理，并应用适当的预处理。幸运的是，分词器还可以采用一对序列，并按照我们的 BERT 模型期望的方式进行准备：</p><pre><code>inputs = tokenizer(&quot;This is the first sentence.&quot;, &quot;This is the second one.&quot;)
+inputs
+
+&#123; 
+  'input_ids': [101, 2023, 2003, 1996, 2034, 6251, 1012, 102, 2023, 2003, 1996, 2117, 2028, 1012, 102],
+  'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+  'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+&#125;
+</code></pre><p>token_type_ids 告诉模型输入的哪一部分是第一个句子，哪个是第二个句子。</p><p>如果我们将 input_ids 里面的 ID 解码回单词：input_ids</p><pre><code>tokenizer.convert_ids_to_tokens(inputs[&quot;input_ids&quot;])
+
+['[CLS]', 'this', 'is', 'the', 'first', 'sentence', '.', '[SEP]', 'this', 'is', 'the', 'second', 'one', '.', '[SEP]']
+</code></pre><p>请注意，如果选择其他检查点，则标记化输入中不一定包含 token_type_ids （例如，如果使用 DistilBERT 模型，则不会返回这些检查点）。只有当模型知道如何处理它们时，它们才会返回，因为它在预训练期间已经看到了它们</p><p>预处理训练数据集的一种方法是：</p><pre><code>tokenized_dataset = tokenizer(
+    raw_datasets[&quot;train&quot;][&quot;sentence1&quot;],
+    raw_datasets[&quot;train&quot;][&quot;sentence2&quot;],
+    padding=True,
+    truncation=True,
+)
+</code></pre><p>为了将数据保留为数据集，我们将使用 Dataset.map（） 方法。这也为我们提供了一些额外的灵活性，如果我们需要完成更多的预处理而不仅仅是标记化。该方法 map () 通过在数据集的每个元素上应用一个函数来工作，因此让我们定义一个函数来标记我们的输入：</p><pre><code>def tokenize_function(example):
+    return tokenizer(example[&quot;sentence1&quot;], example[&quot;sentence2&quot;], truncation=True)
+</code></pre><p>此函数采用字典（如数据集中的项），并返回一个包含键 input_ids, attention_mask, 和 token_type_ids 的新字典。请注意，如果字典包含多个样本（每个键作为句子列表），它也有效，因为如前所述，它对成对的句子列表起作用。这将使我们能够在调用 map () 中使用该选项 batched=True ，这将大大加快标记化。由来自 Tokenizers 库的 Rust 编写的分词器支持。 🤗这个分词器可以非常快，但前提是我们一次给它很多输入。</p><p>请注意，我们暂时在标记化函数中省略了该参数 padding。这是因为将所有样本填充到最大长度是无效的：最好在构建批处理时填充样本，因为这样我们只需要填充到该批中的最大长度，而不是整个数据集中的最大长度。当输入的长度非常可变时，这可以节省大量时间和处理能力！</p><p>以下是我们如何一次在所有数据集上应用标记化函数。我们在调用 map 中使用 batched=True，因此该函数一次应用于数据集的多个元素，而不是分别应用于每个元素。这样可以加快预处理速度。</p><pre><code>tokenized_datasets = raw_datasets.map(tokenize_function, batched=True)
+tokenized_datasets
+</code></pre><p>数据集库应用此处理的方式🤗是向数据集添加新字段，预处理函数返回的字典中的每个键对应一个字段：</p><pre><code>DatasetDict(&#123;
+    train: Dataset(&#123;
+        features: ['attention_mask', 'idx', 'input_ids', 'label', 'sentence1', 'sentence2', 'token_type_ids'],
+        num_rows: 3668
+    &#125;)
+    validation: Dataset(&#123;
+        features: ['attention_mask', 'idx', 'input_ids', 'label', 'sentence1', 'sentence2', 'token_type_ids'],
+        num_rows: 408
+    &#125;)
+    test: Dataset(&#123;
+        features: ['attention_mask', 'idx', 'input_ids', 'label', 'sentence1', 'sentence2', 'token_type_ids'],
+        num_rows: 1725
+    &#125;)
+&#125;)
+</code></pre><p>我们 tokenize_function 返回一个字典，其中包含键 input_ids, attention_mask, and token_type_ids 和 ，因此这三个字段被添加到数据集的所有拆分中。请注意，如果我们的预处理函数返回了我们应用 map (). 到的数据集中现有键的新值，我们也可能更改了现有字段。</p><p>Dynamic padding 动态填充</p><p>负责将批处理中的样本组合在一起的函数称为逐份打印函数 collate function。这是一个参数，你可以在构建 DataLoader 时传递，默认值是一个函数，它将只将你的样本转换为 PyTorch 张量并连接它们（如果你的元素是列表，元组或字典，则递归）。在我们的例子中，这是不可能的，因为我们拥有的输入不会都具有相同的大小。我们故意推迟了填充，仅在必要时将其应用于每个批次，并避免过长的输入和大量的填充。这将使训练速度加快相当快，但请注意，如果您在 TPU 上进行训练，则可能会导致问题 - TPU 更喜欢固定形状，即使这需要额外的填充。</p><p>为了在实践中做到这一点，我们必须定义一个排序规则函数，该函数将对要一起批处理的数据集的项目应用正确的填充量。幸运的是，🤗变形金刚库通过 DataCollatorWithPadding 为我们提供了这样的功能。当您实例化它时，它需要一个分词器（以了解要使用的填充令牌，以及模型是否期望填充位于输入的左侧或右侧），并将执行您需要的一切：</p><pre><code>from transformers import DataCollatorWithPadding
+
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+</code></pre><p>为了测试这款新玩具，让我们从训练集中抓取一些样本，这些样本是我们想一起批量处理的。在这里，我们删除列 idx, sentence1, and sentence2，因为它们不需要并且包含字符串（并且我们不能使用字符串创建张量），并查看批处理中每个条目的长度：</p><pre><code>samples = tokenized_datasets[&quot;train&quot;][:8]
+samples = &#123;k: v for k, v in samples.items() if k not in [&quot;idx&quot;, &quot;sentence1&quot;, &quot;sentence2&quot;]&#125;
+[len(x) for x in samples[&quot;input_ids&quot;]]
+
+[50, 59, 47, 67, 59, 50, 62, 32]
+</code></pre><p><img data-src="/./images/huggingface/1662255397410.png" alt="1662255397410"></p><p><img data-src="/./images/huggingface/1662255589349.png" alt="1662255589349"></p><p>毫不奇怪，我们得到不同长度的样本，从 32 到 67。动态填充意味着该批次中的样品应全部填充到 67 的长度，即批次内的最大长度。如果没有动态填充，则必须将所有样本填充到整个数据集中的最大长度或模型可以接受的最大长度。让我们仔细检查一下，是否 data_collator 正确动态填充了批处理</p><pre><code>batch = data_collator(samples)
+&#123;k: v.shape for k, v in batch.items()&#125;
+
+&#123;'attention_mask': torch.Size([8, 67]),
+ 'input_ids': torch.Size([8, 67]),
+ 'token_type_ids': torch.Size([8, 67]),
+ 'labels': torch.Size([8])&#125;
+</code></pre><p>Fine-tuning a model with the Trainer API</p><p>Transformers 提供了一个 Trainer 类，可帮助您微调它在数据集上提供的任何预训练模型。完成上一节中的所有数据预处理工作后，您只需几个步骤即可定义。最困难的部分可能是准备环境来运行 Trainer.train ()，因为它在 CPU 上运行得非常慢。如果您没有设置 GPU，则可以在 Google Colab 上访问免费的 GPU 或 TPU。</p><pre><code>from datasets import load_dataset
+from transformers import AutoTokenizer, DataCollatorWithPadding
+
+raw_datasets = load_dataset(&quot;glue&quot;, &quot;mrpc&quot;)
+checkpoint = &quot;bert-base-uncased&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+
+
+def tokenize_function(example):
+    return tokenizer(example[&quot;sentence1&quot;], example[&quot;sentence2&quot;], truncation=True)
+
+
+tokenized_datasets = raw_datasets.map(tokenize_function, batched=True)
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+</code></pre><p>Training</p><p>在我们定义 Trainer 之前的第一步是定义一个类 TrainingArguments，该类将包含将用于训练和评估的所有超参数。您必须提供的唯一参数是保存已训练模型的目录，以及沿途的检查点。对于所有其他内容，您可以保留默认值，这对于基本的微调应该非常有效。</p><pre><code>from transformers import TrainingArguments
+
+training_args = TrainingArguments(&quot;test-trainer&quot;)
+</code></pre><p>第二步是定义我们的模型。与上一章一样，我们将使用带有两个标签的 AutoModelForSequenceClassification 类：</p><pre><code>
+from transformers import AutoModelForSequenceClassification
+
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint, num_labels=2)
+
+</code></pre><p><span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kb2NzL3RyYW5zZm9ybWVycy92NC4yMS4yL2VuL21haW5fY2xhc3Nlcy9jb25maWd1cmF0aW9uI3RyYW5zZm9ybWVycy5QcmV0cmFpbmVkQ29uZmlnLmZyb21fcHJldHJhaW5lZA==">https://huggingface.co/docs/transformers/v4.21.2/en/main_classes/configuration#transformers.PretrainedConfig.from_pretrained</span></p><p><img data-src="/./images/huggingface/1662258812563.png" alt="1662258812563"></p><p><img data-src="/./images/huggingface/1662255981205.png" alt="1662255981205"></p><p>您会注意到，与第 2 章不同，在实例化此预训练模型后，您会收到一条警告。这是因为 BERT 尚未预先训练对句子对进行分类，因此已丢弃预训练模型的标头，并添加了适合序列分类的新标头。警告表明未使用某些权重（对应于丢弃的预训练头的权重），并且其他一些权重是随机初始化的（新头的权重）。最后，它鼓励您训练模型，这正是我们现在要做的事情。</p><p>一旦我们有了模型，我们就可以定义一个 Trainer ，方法是将它传递给到目前为止构建的所有对象 model - ，the training_args 的 ，训练和验证数据集，我们的 data_collator, and our tokenizer ：</p><pre><code>from transformers import Trainer
+
+trainer = Trainer(
+    model,
+    training_args,
+    train_dataset=tokenized_datasets[&quot;train&quot;],
+    eval_dataset=tokenized_datasets[&quot;validation&quot;],
+    data_collator=data_collator,
+    tokenizer=tokenizer,
+)
+</code></pre><p>请注意，当您像我们在这里所做的那样传递 tokenizer 时，Trainer 使用的 data_collator 默认值将是前面定义的 DataCollatorWithPadding ，因此您可以跳过此调用中的行 data_collator=data_collator。在第 2 节中向您展示这部分处理仍然很重要</p><p>要在数据集上微调模型，我们只需要调用我们 Trainer 的 train ()</p><pre><code>trainer.train()
+</code></pre><p>这将开始微调（在 GPU 上应该需要几分钟），并每 500 步报告一次训练损失。但是，它不会告诉您模型的性能如何（或质量如何）。这是因为：</p><p>我们没有告诉 Trainer 在训练期间通过设置 evaluation_strategy 为 steps&quot;（评估每个 eval_steps）或&quot;epoch（在每个 epoch 结束时评估）来评估。</p><p>我们没有提供 Trainer 一个 compute_metrics () 函数来计算所述评估期间的指标（否则评估只会打印损失，这不是一个非常直观的数字）</p><p>Evaluation 评估</p><p>让我们看看如何构建一个有用的 compute_metrics () 函数，并在下次训练时使用它。该函数必须采用一个 EvalPrediction 对象（这是一个带有 predictions 字段和 label_ids 字段的命名元组），并将返回一个将字符串映射到浮点数的字典（字符串是返回的指标的名称，浮点数是它们的值）。要从我们的模型中获取一些预测，我们可以使用以下命令 Trainer.predict ()</p><pre><code>predictions = trainer.predict(tokenized_datasets[&quot;validation&quot;])
+
+# predictions 的类型为 transformers.trainer_utils.PredictionOutput
+
+print(predictions.predictions.shape, predictions.label_ids.shape)
+
+(408, 2) (408,)
+</code></pre><p>predict () 方法的输出是另一个命名元组，具有三个字段：predictions, label_ids, and metrics.。该 metrics 字段将仅包含所传递数据集的损失，以及一些时间指标（预测所花费的时间，总计和平均）。一旦我们完成 compute_metrics () 函数并将其传递给 Trainer，该字段还将包含 compute_metrics () 返回的指标。</p><p>如您所见， predictions 是一个形状为 408 x 2 的二维数组（408 是我们使用的数据集中的元素数）。这些是我们传递到的数据集的每个元素的 logits（如您在上一章中看到的，所有 Transformer 模型都返回 logits）。要将它们转换为可以与标签进行比较的预测，我们需要获取第二轴上具有最大值的索引</p><pre><code>import numpy as np
+
+preds = np.argmax(predictions.predictions, axis=-1)
+</code></pre><p>现在，我们可以将 preds 与标签进行比较。要构建 compute_metric () 函数，我们将依赖于评估库中的🤗指标。我们可以像加载数据集一样轻松地加载与 MRPC 数据集关联的指标，这次是使用 evaluate.load () 函数。返回的对象有一个我们可以用来计算指标的 compute () 方法：</p><pre><code>import evaluate
+
+metric = evaluate.load(&quot;glue&quot;, &quot;mrpc&quot;)
+metric.compute(predictions=preds, references=predictions.label_ids)
+
+&#123;'accuracy': 0.8578431372549019, 'f1': 0.8996539792387542&#125;
+
+</code></pre><p>您获得的确切结果可能会有所不同，因为模型头的随机初始化可能会更改其实现的指标。在这里，我们可以看到我们的模型在验证集上的准确率为 85.78%，F1 得分为 89.97。这是用于评估 GLUE 基准测试的 MRPC 数据集结果的两个指标。BERT 论文中的表格报告基本模型的 F1 得分为 88.9。这就是我们当前使用模型时的模型，这解释了更好的结果</p><p>将所有内容包装在一起，我们得到我们的函数：compute_metrics ()</p><pre><code>def compute_metrics(eval_preds):
+    # eval_preds 的类型为 &lt;transformers.trainer_utils.EvalPrediction object at 0x0000029704954910&gt;
+    metric = evaluate.load(&quot;glue&quot;, &quot;mrpc&quot;)
+    logits, labels = eval_preds
+    predictions = np.argmax(logits, axis=-1)
+    return metric.compute(predictions=predictions, references=labels)
+
+</code></pre><p><img data-src="/./images/huggingface/1662263073725.png" alt="1662263073725"></p><p><img data-src="/./images/huggingface/1662263420302.png" alt="1662263420302"></p><p><img data-src="/./images/huggingface/1662263503624.png" alt="1662263503624"></p><p>要查看它在每个 epoch 结束时用于报告指标的实际应用，以下是我们如何使用此 compute_metrics () 函数定义新 Trainer</p><pre><code>training_args = TrainingArguments(&quot;test-trainer&quot;, evaluation_strategy=&quot;epoch&quot;)
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint, num_labels=2)
+
+trainer = Trainer(
+    model,
+    training_args,
+    train_dataset=tokenized_datasets[&quot;train&quot;],
+    eval_dataset=tokenized_datasets[&quot;validation&quot;],
+    data_collator=data_collator,
+    tokenizer=tokenizer,
+    compute_metrics=compute_metrics,
+)
+</code></pre><p>请注意，我们创建了一个设置为 evaluation_strategy set to &quot;epoch&quot; 的新 TrainingArguments 和一个新模型 — 否则，我们只会继续训练我们已经训练过的模型。要启动新的训练运行，我们执行：</p><pre><code>trainer.train()
+</code></pre><p>A full training</p><pre><code>from datasets import load_dataset
+from transformers import AutoTokenizer, DataCollatorWithPadding
+
+raw_datasets = load_dataset(&quot;glue&quot;, &quot;mrpc&quot;)
+checkpoint = &quot;bert-base-uncased&quot;
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+
+
+def tokenize_function(example):
+    return tokenizer(example[&quot;sentence1&quot;], example[&quot;sentence2&quot;], truncation=True)
+
+
+tokenized_datasets = raw_datasets.map(tokenize_function, batched=True)
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+</code></pre><p>Prepare for training</p><p>在实际编写训练循环之前，我们需要定义一些对象。第一个是我们将用于迭代批处理的数据加载器 dataloaders 。但是在我们定义这些数据加载器之前，我们需要对我们的 tokenized_datasets 应用一些后处理，以自动处理一些为我们做的事。具体而言，我们需要</p><p>删除与模型不期望的值对应的列（如 sentence1 和 sentence2 列）</p><p>将列 label 重命名为 labels（因为模型期望将参数命名为 labels ）</p><p>设置数据集的格式，以便它们返回 PyTorch 张量而不是列表。</p><p>对于每个步骤，我们 tokenized_datasets 都有一种方法：</p><pre><code>tokenized_datasets = tokenized_datasets.remove_columns([&quot;sentence1&quot;, &quot;sentence2&quot;, &quot;idx&quot;])
+tokenized_datasets = tokenized_datasets.rename_column(&quot;label&quot;, &quot;labels&quot;)
+tokenized_datasets.set_format(&quot;torch&quot;)
+tokenized_datasets[&quot;train&quot;].column_names
+
+[&quot;attention_mask&quot;, &quot;input_ids&quot;, &quot;labels&quot;, &quot;token_type_ids&quot;]
+</code></pre><p>现在完成此操作，我们可以轻松定义数据加载器：</p><pre><code>from torch.utils.data import DataLoader
+
+train_dataloader = DataLoader(
+    tokenized_datasets[&quot;train&quot;], shuffle=True, batch_size=8, collate_fn=data_collator
+)
+eval_dataloader = DataLoader(
+    tokenized_datasets[&quot;validation&quot;], batch_size=8, collate_fn=data_collator
+)
+</code></pre><p>为了快速检查数据处理中没有错误，我们可以检查如下批次：</p><pre><code>for batch in train_dataloader:
+    break
+&#123;k: v.shape for k, v in batch.items()&#125;
+
+&#123;'attention_mask': torch.Size([8, 65]),
+ 'input_ids': torch.Size([8, 65]),
+ 'labels': torch.Size([8]),
+ 'token_type_ids': torch.Size([8, 65])&#125;
+
+</code></pre><p>请注意，实际的形状可能会略有不同，因为我们为训练数据加载器进行了设置 shuffle=True，并且我们正在填充到批处理中的最大长度。</p><p>转向模型。我们完全按照上一节中的做法对其进行实例化：</p><pre><code>from transformers import AutoModelForSequenceClassification
+
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint, num_labels=2)
+</code></pre><p>为了确保在训练期间一切顺利进行，我们将批处理传递给此模型：</p><pre><code>outputs = model(**batch)
+print(outputs.loss, outputs.logits.shape)
+
+
+tensor(0.5441, grad_fn=&lt;NllLossBackward&gt;) torch.Size([8, 2])
+
+</code></pre><p>所有 🤗 Transformers 模型在提供 labels 时都将返回损耗，我们还将获得 logits（对于批处理中的每个输入，即张量大小为 8 x 2）</p><p>我们几乎已经准备好编写训练循环了！我们只是缺少两样东西：优化器和学习速率调度器。由于我们尝试复制手动执行的操作，因此我们将使用相同的默认值。使用的优化器是 ，它与 Adam 相同，但对权重衰减正则化进行了扭曲</p><pre><code>from transformers import AdamW
+
+optimizer = AdamW(model.parameters(), lr=5e-5)
+</code></pre><p>最后，默认使用的学习速率调度器只是从最大值 （5e-5） 到 0 的线性衰减。为了正确定义它，我们需要知道我们将采取的训练步骤的数量，即我们要运行的纪元数乘以训练批次的数量（这是训练数据加载器的长度）。默认情况下，它们 Trainer 使用三个 epoch，因此我们将遵循以下原则</p><pre><code>from transformers import get_scheduler
+
+num_epochs = 3
+num_training_steps = num_epochs * len(train_dataloader)
+lr_scheduler = get_scheduler(
+    &quot;linear&quot;,
+    optimizer=optimizer,
+    num_warmup_steps=0,
+    num_training_steps=num_training_steps,
+)
+print(num_training_steps)
+
+1377
+</code></pre><p>The training loop</p><p>最后一件事：如果我们可以访问 GPU，我们将希望使用 GPU（在 CPU 上，训练可能需要几个小时而不是几分钟）。为此，我们定义了一个 device，我们将我们的模型和批处理放在</p><pre><code>import torch
+
+device = torch.device(&quot;cuda&quot;) if torch.cuda.is_available() else torch.device(&quot;cpu&quot;)
+model.to(device)
+device
+
+device(type='cuda')
+</code></pre><pre><code>from tqdm.auto import tqdm
+
+progress_bar = tqdm(range(num_training_steps))
+
+model.train()
+for epoch in range(num_epochs):
+    for batch in train_dataloader:
+        batch = &#123;k: v.to(device) for k, v in batch.items()&#125;
+        outputs = model(**batch)
+        loss = outputs.loss
+        loss.backward()
+
+        optimizer.step()
+        lr_scheduler.step()
+        optimizer.zero_grad()
+        progress_bar.update(1)
+</code></pre><p>您可以看到，训练循环的核心看起来很像简介中的核心。我们没有要求任何报告，因此此训练循环不会告诉我们有关模型表现的任何信息。我们需要为此添加一个评估循环。</p><p>The evaluation loop</p><p>如前所述，我们将使用 Evaluate 库提供的 metric。我们已经看到了 metric.compute () 方法，但是当我们使用 add_batch () 方法进行预测循环时，metrics 实际上可以为我们积累批次。一旦我们积累了所有批次，我们就可以得到最终的结果。下面介绍如何在评估循环中实现所有这些功能</p><pre><code>import evaluate
+
+metric = evaluate.load(&quot;glue&quot;, &quot;mrpc&quot;)
+model.eval()
+for batch in eval_dataloader:
+    batch = &#123;k: v.to(device) for k, v in batch.items()&#125;
+    with torch.no_grad():
+        outputs = model(**batch)
+
+    logits = outputs.logits
+    predictions = torch.argmax(logits, dim=-1)
+    metric.add_batch(predictions=predictions, references=batch[&quot;labels&quot;])
+
+metric.compute()
+</code></pre><p>同样，由于模型头初始化和数据随机排列的随机性，您的结果将略有不同，但它们应该处于相同的大致值。</p><p>我们之前定义的训练循环在单个 CPU 或 GPU 上运行良好。但是使用 🤗 Accelerate 库，只需进行一些调整，我们就可以在多个 GPU 或 TPU 上启用分布式训练。从创建训练和验证数据加载器开始，我们的手动训练循环如下所示：</p><pre><code>from transformers import AdamW, AutoModelForSequenceClassification, get_scheduler
+
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint, num_labels=2)
+optimizer = AdamW(model.parameters(), lr=3e-5)
+
+device = torch.device(&quot;cuda&quot;) if torch.cuda.is_available() else torch.device(&quot;cpu&quot;)
+model.to(device)
+
+num_epochs = 3
+num_training_steps = num_epochs * len(train_dataloader)
+lr_scheduler = get_scheduler(
+    &quot;linear&quot;,
+    optimizer=optimizer,
+    num_warmup_steps=0,
+    num_training_steps=num_training_steps,
+)
+
+progress_bar = tqdm(range(num_training_steps))
+
+model.train()
+for epoch in range(num_epochs):
+    for batch in train_dataloader:
+        batch = &#123;k: v.to(device) for k, v in batch.items()&#125;
+        outputs = model(**batch)
+        loss = outputs.loss
+        loss.backward()
+
+        optimizer.step()
+        lr_scheduler.step()
+        optimizer.zero_grad()
+        progress_bar.update(1)
+
+</code></pre><p>以下是更改：</p><pre><code>+ from accelerate import Accelerator
+  from transformers import AdamW, AutoModelForSequenceClassification, get_scheduler
+
++ accelerator = Accelerator()
+
+  model = AutoModelForSequenceClassification.from_pretrained(checkpoint, num_labels=2)
+  optimizer = AdamW(model.parameters(), lr=3e-5)
+
+- device = torch.device(&quot;cuda&quot;) if torch.cuda.is_available() else torch.device(&quot;cpu&quot;)
+- model.to(device)
+
++ train_dataloader, eval_dataloader, model, optimizer = accelerator.prepare(
++     train_dataloader, eval_dataloader, model, optimizer
++ )
+
+  num_epochs = 3
+  num_training_steps = num_epochs * len(train_dataloader)
+  lr_scheduler = get_scheduler(
+      &quot;linear&quot;,
+      optimizer=optimizer,
+      num_warmup_steps=0,
+      num_training_steps=num_training_steps
+  )
+
+  progress_bar = tqdm(range(num_training_steps))
+
+  model.train()
+  for epoch in range(num_epochs):
+      for batch in train_dataloader:
+-         batch = &#123;k: v.to(device) for k, v in batch.items()&#125;
+          outputs = model(**batch)
+          loss = outputs.loss
+-         loss.backward()
++         accelerator.backward(loss)
+
+          optimizer.step()
+          lr_scheduler.step()
+          optimizer.zero_grad()
+          progress_bar.update(1)
+</code></pre><p>要添加的第一行是导入行。第二行实例化一个 Accelerator 对象，该对象将查看环境并初始化正确的分布式设置。Accelerate 将为您处理设备放置，以便您可以删除将模型放在设备上的那一行（或者，如果您愿意，可以将它们更改为使用 accelerator.device 而不是 device）。</p><p>然后，在将数据加载器 dataloaders、模型 model 和优化器 optimizer 发送到 accelerator.prepare () 的行中完成大部分工作。这会将这些对象包装在适当的容器中，以确保您的分布式训练按预期工作。要进行的其余更改是删除将批处理放在 device 上的行（同样，如果要保留此行，只需将其更改为使用 accelerator.device），然后替换 loss.backward () 为 accelerator.backward (loss)</p><p>为了从云 TPU 提供的加速中受益，我们建议使用分词器的 “padding=”max_length“” 和 “max_length” 参数将样本填充到固定长度。</p><p>如果您想复制并粘贴它以进行游戏，以下是 Accelerate 的完整训练循环</p><pre><code>from accelerate import Accelerator
+from transformers import AdamW, AutoModelForSequenceClassification, get_scheduler
+
+accelerator = Accelerator()
+
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint, num_labels=2)
+optimizer = AdamW(model.parameters(), lr=3e-5)
+
+train_dl, eval_dl, model, optimizer = accelerator.prepare(
+    train_dataloader, eval_dataloader, model, optimizer
+)
+
+num_epochs = 3
+num_training_steps = num_epochs * len(train_dl)
+lr_scheduler = get_scheduler(
+    &quot;linear&quot;,
+    optimizer=optimizer,
+    num_warmup_steps=0,
+    num_training_steps=num_training_steps,
+)
+
+progress_bar = tqdm(range(num_training_steps))
+
+model.train()
+for epoch in range(num_epochs):
+    for batch in train_dl:
+        outputs = model(**batch)
+        loss = outputs.loss
+        accelerator.backward(loss)
+
+        optimizer.step()
+        lr_scheduler.step()
+        optimizer.zero_grad()
+        progress_bar.update(1)
+</code></pre><p>将其放入 train.py 脚本中将使该脚本可在任何类型的分布式设置上运行。要在分布式设置中试用它，请运行以下命令</p><pre><code>accelerate config
+</code></pre><p>这将提示您回答几个问题，并将您的答案转储到以下命令使用的配置文件中：</p><pre><code>accelerate launch train.py
+</code></pre><p>这将启动分布式训练。</p><p>如果你想在笔记本中尝试此操作（例如，在 Colab 上使用 TPU 进行测试），只需将代码粘贴到 training_function () 中，然后运行最后一个单元格</p><pre><code>from accelerate import notebook_launcher
+
+notebook_launcher(training_function)
+</code></pre><h2 id="the-datasets-library"><a class="anchor" href="#the-datasets-library">#</a> THE DATASETS LIBRARY</h2><h3 id="introduction"><a class="anchor" href="#introduction">#</a> Introduction</h3><p>发现在微调模型时有三个主要步骤：</p><p>从拥抱人脸中心加载数据集。<br>使用 Dataset.map () 预处理数据。<br>负载和计算指标。</p><p>但这只是触及数据集可以做什么的表面！在本章中，我们将深入研究该库。在此过程中，我们将找到以下问题的答案：</p><p><img data-src="/./images/huggingface/1662276951244.png" alt="1662276951244"></p><p>当数据集不在 Hub 上时，该怎么办？<br>如何对数据集进行切片和切块？（如果你真的需要使用熊猫怎么办？<br>当您的数据集很大并且会融化笔记本电脑的 RAM 时，您会怎么做？<br>“内存映射” 和 Apache Arrow 到底是什么？<br>如何创建自己的数据集并将其推送到中心？</p><h3 id="what-if-my-dataset-isnt-on-the-hub"><a class="anchor" href="#what-if-my-dataset-isnt-on-the-hub">#</a> What if my dataset isn't on the Hub?</h3><p>Working with local and remote datasets</p><p>Datasets 提供加载脚本来处理本地和远程数据集的加载。它支持几种常见的数据格式，例如：</p><p><img data-src="/./images/huggingface/1662277458341.png" alt="1662277458341"></p><p>如表中所示，对于每种数据格式，我们只需要在 load_dataset () 函数中指定加载脚本的类型，以及指定一个或多个文件的路径的 data_files 参数。让我们从本地文件加载数据集开始；稍后我们将了解如何对远程文件执行相同的操作。</p><p>Loading a local dataset</p><p>下载 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NydXg4Mi9zcXVhZC1pdC9yYXcvbWFzdGVyL1NRdUFEX2l0LXRyYWluLmpzb24uZ3o=">https://github.com/crux82/squad-it/raw/master/SQuAD_it-train.json.gz</span> <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NydXg4Mi9zcXVhZC1pdC9yYXcvbWFzdGVyL1NRdUFEX2l0LXRlc3QuanNvbi5neg==">https://github.com/crux82/squad-it/raw/master/SQuAD_it-test.json.gz</span> 并解压缩</p><p>我们可以看到压缩文件已被 SQuAD_it-train.json 和 SQuAD_it-text.json 替换，并且数据以 JSON 格式存储。</p><p>要使用 load_dataset () 函数加载 JSON 文件，我们只需要知道我们是在处理普通的 JSON（类似于嵌套字典）还是 JSON Lines（行分隔的 JSON）。与许多问答数据集一样，SQuAD-it 使用嵌套格式，所有文本都存储在 data 字段中。这意味着我们可以通过指定 field 参数来加载数据集，如下所示</p><pre><code>from datasets import load_dataset
+
+squad_it_dataset = load_dataset(&quot;json&quot;, data_files=&quot;SQuAD_it-train.json&quot;, field=&quot;data&quot;)
+
+squad_it_dataset = load_dataset(&quot;json&quot;, data_files=&quot;../nlp-datasets/SQuAD_it-train.json&quot;, field=&quot;data&quot;)
+
+# 第二个参数是路径
+</code></pre><p>默认情况下，加载本地文件会创建一个 train 的 DatasetDict 对象。我们可以通过检查对象来看到这一点</p><pre><code>squad_it_dataset
+
+DatasetDict(&#123;
+    train: Dataset(&#123;
+        features: ['title', 'paragraphs'],
+        num_rows: 442
+    &#125;)
+&#125;)
+</code></pre><p>这向我们显示了与训练集关联的行数和列名。我们可以通过索引到 train 中来查看其中一个示例，如下所示</p><pre><code>squad_it_dataset[&quot;train&quot;][0]
+
+&#123;
+    &quot;title&quot;: &quot;Terremoto del Sichuan del 2008&quot;,
+    &quot;paragraphs&quot;: [
+        &#123;
+            &quot;context&quot;: &quot;Il terremoto del Sichuan del 2008 o il terremoto...&quot;,
+            &quot;qas&quot;: [
+                &#123;
+                    &quot;answers&quot;: [&#123;&quot;answer_start&quot;: 29, &quot;text&quot;: &quot;2008&quot;&#125;],
+                    &quot;id&quot;: &quot;56cdca7862d2951400fa6826&quot;,
+                    &quot;question&quot;: &quot;In quale anno si è verificato il terremoto nel Sichuan?&quot;,
+                &#125;,
+                ...
+            ],
+        &#125;,
+        ...
+    ],
+&#125;
+</code></pre><p>但是，虽然这适用于训练集，但我们真正想要的是将 train 和 test 都包含在单个 DatasetDict 对象中，以便我们可以同时在两个拆分中应用 Dataset.map () 函数。为此，我们可以为 data_files 参数提供一个字典，该参数将每个拆分名称映射到与该拆分关联的文件：</p><pre><code>data_files = &#123;&quot;train&quot;: &quot;../nlp-datasets/SQuAD_it-train.json&quot;, &quot;test&quot;: &quot;../nlp-datasets/SQuAD_it-test.json&quot;&#125;
+squad_it_dataset = load_dataset(&quot;json&quot;, data_files=data_files, field=&quot;data&quot;)
+squad_it_dataset
+
+DatasetDict(&#123;
+    train: Dataset(&#123;
+        features: ['title', 'paragraphs'],
+        num_rows: 442
+    &#125;)
+    test: Dataset(&#123;
+        features: ['title', 'paragraphs'],
+        num_rows: 48
+    &#125;)
+&#125;)
+</code></pre><p>这正是我们想要的。现在，我们可以应用各种预处理技术来清理数据，标记评论等。</p><p><span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kb2NzL2RhdGFzZXRzL2xvYWRpbmcjbG9jYWwtYW5kLXJlbW90ZS1maWxlcw==">https://huggingface.co/docs/datasets/loading#local-and-remote-files</span></p><p>load_dataset () 函数的 data_files 参数非常灵活，可以是单个文件路径、文件路径列表或将拆分名称映射到文件路径的字典。您还可以根据 Unix shell 使用的规则将匹配指定模式的文件（例如，您可以通过设置 data_files=&quot;*.json&quot; 将目录中的所有 JSON 文件作为单个拆分进行 glob）</p><p>数据集中的加载脚本实际上支持输入文件的自动解压缩，因此我们可以通过将参数直接指向压缩文件来跳过的使用</p><pre><code>data_files = &#123;&quot;train&quot;: &quot;SQuAD_it-train.json.gz&quot;, &quot;test&quot;: &quot;SQuAD_it-test.json.gz&quot;&#125;
+squad_it_dataset = load_dataset(&quot;json&quot;, data_files=data_files, field=&quot;data&quot;)
+</code></pre><p>如果您不想手动解压缩许多 GZIP 文件，这可能很有用。自动解压缩也适用于其他常见格式，如 ZIP 和 TAR，所以你只需要 data_files 指向压缩文件，你就可以了</p><p>Loading a remote dataset</p><p>如果你在一家公司担任数据科学家或程序员，那么你想要分析的数据集很有可能存储在某个远程服务器上。幸运的是，加载远程文件与加载本地文件一样简单！我们不是提供本地文件的路径，而是将 load_dataset () 的 data_files 参数指向存储远程文件的一个或多个 URL。例如，对于托管在 GitHub 上的 SQuAD-it 数据集，我们可以只指向 SQuAD_it-*.json.gz URL，如下所示</p><pre><code>url = &quot;https://github.com/crux82/squad-it/raw/master/&quot;
+data_files = &#123;
+    &quot;train&quot;: url + &quot;SQuAD_it-train.json.gz&quot;,
+    &quot;test&quot;: url + &quot;SQuAD_it-test.json.gz&quot;,
+&#125;
+squad_it_dataset = load_dataset(&quot;json&quot;, data_files=data_files, field=&quot;data&quot;)
+</code></pre><p>这将返回上面获取的相同 DatasetDict 对象，但节省了手动下载和解压缩 SQuAD_it-*.json.gz 文件的步骤。这总结了我们对加载未托管在 Hugging Face Hub 上的数据集的各种方法的尝试</p><h3 id="time-to-slice-and-dice"><a class="anchor" href="#time-to-slice-and-dice">#</a> Time to slice and dice</h3><p>大多数情况下，您使用的数据不会为训练模型做好充分的准备。在本节中，我们将探讨数据集为清理数据集而提供的各种功能</p><p>Slicing and dicing our data</p><p>对于此示例，我们将使用托管在加州大学欧文分校机器学习存储库上的药物审查数据集，其中包含对各种药物的患者评论，以及正在治疗的病情和患者满意度的 10 星评级。</p><p>使用的数据集 <span class="exturl" data-url="aHR0cHM6Ly9hcmNoaXZlLmljcy51Y2kuZWR1L21sL2RhdGFzZXRzL0RydWcrUmV2aWV3K0RhdGFzZXQrJTI4RHJ1Z3MuY29tJTI5">https://archive.ics.uci.edu/ml/datasets/Drug+Review+Dataset+(Drugs.com)</span></p><p><span class="exturl" data-url="aHR0cHM6Ly9hcmNoaXZlLmljcy51Y2kuZWR1L21sL21hY2hpbmUtbGVhcm5pbmctZGF0YWJhc2VzLzAwNDYyL2RydWdzQ29tX3Jhdy56aXA=">https://archive.ics.uci.edu/ml/machine-learning-databases/00462/drugsCom_raw.zip</span></p><p>由于 TSV 只是 CSV 的一种变体，它使用制表符而不是逗号作为分隔符，因此我们可以通过使用 csv 加载脚本并在 load_dataset () 函数中指定 delimiter 参数来加载这些文件，</p><pre><code>from datasets import load_dataset
+
+data_files = &#123;&quot;train&quot;: &quot;drugsComTrain_raw.tsv&quot;, &quot;test&quot;: &quot;drugsComTest_raw.tsv&quot;&#125;
+# \t is the tab character in Python
+drug_dataset = load_dataset(&quot;csv&quot;, data_files=data_files, delimiter=&quot;\t&quot;)
+</code></pre><p>在进行任何类型的数据分析时，一个好的做法是抓取一个小的随机样本，以快速了解您正在处理的数据类型。在 Datasets, 中，我们可以通过将 Dataset.shuffle () 和 Dataset.select () 函数链接在一起来创建一个随机样本</p><pre><code>drug_sample = drug_dataset[&quot;train&quot;].shuffle(seed=42).select(range(1000))
+# Peek at the first few examples
+drug_sample[:3]
+
+&#123;'Unnamed: 0': [87571, 178045, 80482],
+ 'drugName': ['Naproxen', 'Duloxetine', 'Mobic'],
+ 'condition': ['Gout, Acute', 'ibromyalgia', 'Inflammatory Conditions'],
+ 'review': ['&quot;like the previous person mention, I&amp;#039;m a strong believer of aleve, it works faster for my gout than the prescription meds I take. No more going to the doctor for refills.....Aleve works!&quot;',
+  '&quot;I have taken Cymbalta for about a year and a half for fibromyalgia pain. It is great\r\nas a pain reducer and an anti-depressant, however, the side effects outweighed \r\nany benefit I got from it. I had trouble with restlessness, being tired constantly,\r\ndizziness, dry mouth, numbness and tingling in my feet, and horrible sweating. I am\r\nbeing weaned off of it now. Went from 60 mg to 30mg and now to 15 mg. I will be\r\noff completely in about a week. The fibro pain is coming back, but I would rather deal with it than the side effects.&quot;',
+  '&quot;I have been taking Mobic for over a year with no side effects other than an elevated blood pressure.  I had severe knee and ankle pain which completely went away after taking Mobic.  I attempted to stop the medication however pain returned after a few days.&quot;'],
+ 'rating': [9.0, 3.0, 10.0],
+ 'date': ['September 2, 2015', 'November 7, 2011', 'June 5, 2013'],
+ 'usefulCount': [36, 13, 128]&#125;
+</code></pre><p>请注意，出于可重复性目的，我们已将种子固定在 Dataset.shuffle () 中。 Dataset.select () 期望索引的可迭代性，因此我们传入 range (1000) 从数据集中获取了前 1，000 个示例。从这个样本中，我们已经可以在我们的数据集中看到一些怪癖</p><p>The Unnamed: 0 列看起来可疑地像是每个患者的匿名 ID<br>condition 列包括大写和小写标签的混合<br>评论的长度各不相同，并且包含 Python 行分隔符（）以及 HTML 字符代码（如 \r\n&amp;#039;）的混合</p><p>让我们看看如何使用 Datasets 来处理这些问题。为了测试 Unnamed: 0 列的患者 ID 假设，我们可以使用 Dataset.unique () 函数来验证 ID 数是否与每个拆分中的行数匹配</p><pre><code>for split in drug_dataset.keys():
+    assert len(drug_dataset[split]) == len(drug_dataset[split].unique(&quot;Unnamed: 0&quot;))
+</code></pre><p>drug_dataset.keys () 为 dict_keys (['train', 'test'])</p><p>这似乎证实了我们的假设，因此让我们通过将 Unnamed: 0 列重命名为更易于解释的内容来清理数据集。我们可以使用 DatasetDict.rename_column () 函数一次性重命名两个拆分中的列：</p><pre><code>drug_dataset = drug_dataset.rename_column(
+    original_column_name=&quot;Unnamed: 0&quot;, new_column_name=&quot;patient_id&quot;
+)
+drug_dataset
+
+DatasetDict(&#123;
+    train: Dataset(&#123;
+        features: ['patient_id', 'drugName', 'condition', 'review', 'rating', 'date', 'usefulCount'],
+        num_rows: 161297
+    &#125;)
+    test: Dataset(&#123;
+        features: ['patient_id', 'drugName', 'condition', 'review', 'rating', 'date', 'usefulCount'],
+        num_rows: 53766
+    &#125;)
+&#125;)
+</code></pre><p>接下来，让我们使用 Dataset.map () 规范化所有 condition 标签。正如我们在第 3 章中对标记化所做的那样，我们可以定义一个简单的函数，该函数可以应用于中每个拆分的所有行：</p><pre><code>def lowercase_condition(example):
+    return &#123;&quot;condition&quot;: example[&quot;condition&quot;].lower()&#125;
+
+
+drug_dataset.map(lowercase_condition)
+
+AttributeError: 'NoneType' object has no attribute 'lower'
+</code></pre><p>哦，不，我们的 map 遇到了问题！从错误中我们可以推断出 condition 列中的一些条目是 None，它们不能小写，因为它们不是字符串。让我们使用 Dataset.filter () 删除这些行，其工作方式与接收数据集的单个示例的 Dataset.map () 函数类似，并且期望该函数接收数据集的单个示例。而不是编写一个显式函数</p><pre><code>def filter_nones(x):
+    return x[&quot;condition&quot;] is not None
+</code></pre><p>然后运行 drug_dataset.filter (filter_nones) ，我们可以使用 lambda 函数在一行中执行此操作。在 Python 中，lambda 函数是一些小函数，无需显式命名即可定义它们。它们采用一般形式</p><pre><code>lambda &lt;arguments&gt; : &lt;expression&gt;
+</code></pre><p>在 🤗 Datasets 上下文中，我们可以使用 lambda 函数来定义简单的映射和筛选操作，因此让我们使用此技巧来消除数据集中的条目</p><pre><code>drug_dataset = drug_dataset.filter(lambda x: x[&quot;condition&quot;] is not None)
+</code></pre><p>删除 None 条目后，我们可以规范化 condition 列</p><pre><code>drug_dataset = drug_dataset.map(lowercase_condition)
+# Check that lowercasing worked
+drug_dataset[&quot;train&quot;][&quot;condition&quot;][:3]
+
+['left ventricular dysfunction', 'adhd', 'birth control']
+</code></pre><p>它的工作原理！现在我们已经清理了标签，让我们来看看清理评论本身。</p><p>Creating new columns 创建新列</p><p>每当您处理客户评论 reviews 时，一个好的做法是检查每个评论中的字数。评论可能只是一个单词，如 “Great!” 或一篇包含数千字的完整文章，根据用例，您需要以不同的方式处理这些极端情况。为了计算每个评论中的单词数，我们将使用基于按空格拆分每个文本的粗略启发式方法。</p><p>让我们定义一个简单的函数来计算每个评论中的字数</p><pre><code>def compute_review_length(example):
+    return &#123;&quot;review_length&quot;: len(example[&quot;review&quot;].split())&#125;
+</code></pre><p>与我们的 lowercase_condition () 函数不同，compute_review_length () 返回一个字典，其键与数据集中的某个列名不对应。在这种情况下，当 compute_review_length () 传递给 Dataset.map () 时，它将应用于数据集中的所有行以创建新列 review_length：</p><pre><code>drug_dataset = drug_dataset.map(compute_review_length)
+# Inspect the first training example
+drug_dataset[&quot;train&quot;][0]
+
+&#123;'patient_id': 206461,
+ 'drugName': 'Valsartan',
+ 'condition': 'left ventricular dysfunction',
+ 'review': '&quot;It has no side effect, I take it in combination of Bystolic 5 Mg and Fish Oil&quot;',
+ 'rating': 9.0,
+ 'date': 'May 20, 2012',
+ 'usefulCount': 27,
+ 'review_length': 17&#125;
+</code></pre><p>正如预期的那样，我们可以看到 review_length 列已添加到我们的训练集中。我们可以对此新列进行排序 Dataset.sort ()，以查看极值的外观</p><pre><code>drug_dataset[&quot;train&quot;].sort(&quot;review_length&quot;)[:3]
+
+&#123;'patient_id': [103488, 23627, 20558],
+ 'drugName': ['Loestrin 21 1 / 20', 'Chlorzoxazone', 'Nucynta'],
+ 'condition': ['birth control', 'muscle spasm', 'pain'],
+ 'review': ['&quot;Excellent.&quot;', '&quot;useless&quot;', '&quot;ok&quot;'],
+ 'rating': [10.0, 1.0, 6.0],
+ 'date': ['November 4, 2008', 'March 24, 2017', 'August 20, 2016'],
+ 'usefulCount': [5, 2, 10],
+ 'review_length': [1, 1, 1]&#125;
+</code></pre><p>正如我们所怀疑的那样，一些评论只包含一个单词，尽管对于情感分析来说可能是可以的，但如果我们想要预测这种情况，则不会提供信息。</p><p>向数据集添加新列的另一种方法是使用 Dataset.add_column () 函数。这允许您将列作为 Python 列表或 NumPy 数组提供，并且在不适合您的 Dataset.map () 分析的情况下可以很方便</p><p><span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kb2NzL2RhdGFzZXRzL3BhY2thZ2VfcmVmZXJlbmNlL21haW5fY2xhc3NlcyNkYXRhc2V0cy5EYXRhc2V0LnNvcnQ=">sort 的 api</span></p><p>让我们使用 Dataset.filter () 函数删除包含少于 30 个字数的评论。与我们对 condition 所做的类似，我们可以通过要求评论的长度超过此阈值来过滤掉非常短的评论：</p><pre><code>drug_dataset = drug_dataset.filter(lambda x: x[&quot;review_length&quot;] &gt; 30)
+print(drug_dataset.num_rows)
+
+&#123;'train': 138514, 'test': 46108&#125;
+</code></pre><p>我们需要处理的最后一件事是我们的评论中存在 HTML 字符代码。我们可以使用 Python 的 html 模块来解开这些字符，如下所示</p><pre><code>import html
+
+text = &quot;I&amp;#039;m a transformer called BERT&quot;
+html.unescape(text)
+
+&quot;I'm a transformer called BERT&quot;
+</code></pre><p>我们将使用 Dataset.map () 来取消文本集中的所有 HTML 字符</p><pre><code>drug_dataset = drug_dataset.map(lambda x: &#123;&quot;review&quot;: html.unescape(x[&quot;review&quot;])&#125;)
+</code></pre><p>The map() method's superpowers</p><p>Dataset.map () 方法采用一个 batched 参数，如果设置为 True，则会导致它一次向 map 函数发送一批示例（批大小是可配置的，但默认为 1，000）。例如，上一个取消转义所有 HTML 的 map 函数需要一些时间来运行（您可以从进度条中读取所花费的时间）。我们可以通过使用列表理解同时处理多个元素来加快速度。</p><p>指定 batched=True, 函数将接收包含数据集字段的字典，但每个值现在都是一个值列表 list of values，而不仅仅是单个值。 Dataset.map () 的返回值应该是相同的：一个字典，其中包含我们要更新或添加到数据集中的字段，以及一个值列表。例如，这是另一种取消外置所有 HTML 字符的方法，但使用 batched=True</p><pre><code>new_drug_dataset = drug_dataset.map(
+    lambda x: &#123;&quot;review&quot;: [html.unescape(o) for o in x[&quot;review&quot;]]&#125;, batched=True
+)
+</code></pre><p>要使用快速分词器标记所有药物评论，我们可以使用如下函数</p><pre><code>from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained(&quot;bert-base-cased&quot;)
+
+
+def tokenize_function(examples):
+    return tokenizer(examples[&quot;review&quot;], truncation=True)
+</code></pre><pre><code>tokenized_dataset = drug_dataset.map(tokenize_function, batched=True)
+</code></pre><p><img data-src="/./images/huggingface/1662293177259.png" alt="1662293177259"></p><p>Dataset.map () 也有自己的一些并行化能力。由于它们没有 Rust 的支持，因此它们不会让慢速分词器赶上快速分词器，但它们仍然很有帮助（特别是如果您使用的是没有快速版本的分词器）。要启用多处理，请使用 num_proc 参数并指定要在调用 Dataset.map () 中使用的进程数：</p><pre><code>slow_tokenizer = AutoTokenizer.from_pretrained(&quot;bert-base-cased&quot;, use_fast=False)
+
+
+def slow_tokenize_function(examples):
+    return slow_tokenizer(examples[&quot;review&quot;], truncation=True)
+
+
+tokenized_dataset = drug_dataset.map(slow_tokenize_function, batched=True, num_proc=8)
+</code></pre><p><img data-src="/./images/huggingface/1662293688998.png" alt="1662293688998"></p><p>对于慢速分词器来说，这些是更合理的结果，但快速分词器的性能也得到了显着提高。但是，请注意，情况并非总是如此 - 对于 8 以外的 num_proc 值，我们的测试表明，如果没有该选项，batched=True 使用起来会更快。通常，我们不建议使 batched=True 用 Python 多处理来快速分词器。</p><p>在机器学习中，示例 example 通常定义为我们提供给模型的一组特征 features。在某些上下文中，这些功能将是 Dataset 中的列集，但在其他上下文中（如此处和问答），可以从单个示例中提取多个功能并属于单个列</p><p>让我们来看看它是如何工作的！在这里，我们将标记我们的示例并将其截断为最大长度 128，但是我们将要求分词器返回文本的所有块，而不仅仅是第一个。这可以通过 return_overflowing_tokens=True 方式完成</p><pre><code>def tokenize_and_split(examples):
+    return tokenizer(
+        examples[&quot;review&quot;],
+        truncation=True,
+        max_length=128,
+        return_overflowing_tokens=True,
+    )
+</code></pre><p>让我们先在一个示例中对此进行测试，然后再在整个数据集上使用 Dataset.map ()</p><pre><code>result = tokenize_and_split(drug_dataset[&quot;train&quot;][0])
+[len(inp) for inp in result[&quot;input_ids&quot;]]
+
+[128, 49]
+</code></pre><h2 id="the-tokenizers-library"><a class="anchor" href="#the-tokenizers-library">#</a> THE TOKENIZERS LIBRARY</h2><h2 id="token-classification"><a class="anchor" href="#token-classification">#</a> Token classification</h2><p>我们将探讨的第一个应用是 token 分类。此通用任务包含可表述为 “将标签归因于句子中的每个标记” 的任何问题，例如：</p><p>Named entity recognition (NER) 命名实体识别 查找句子中的实体（如人员、位置或组织）。这可以表述为通过每个实体有一个类和一个 “无实体” 的类来将标签归因于每个令牌。</p><p>Part-of-speech tagging (POS) 词性标记 将句子中的每个字词标记为对应于特定的词性（如名词、动词、形容词等）</p><p>Chunking 分块 查找属于同一实体的令牌。此任务（可以与 POS 或 NER 结合使用）可以表述为将一个标签（通常）归因于位于块开头的任何令牌，将另一个标签（通常）归因于块内的令牌，并将第三个标签（通常）归因于不属于任何块的令牌</p><p>Preparing the data</p><p>首先，我们需要一个适合令牌分类的数据集。在本节中，我们将使用 CoNLL-2003 数据集，其中包含路透社的新闻报道。</p><p><span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby9kYXRhc2V0cy9jb25sbDIwMDM=">https://huggingface.co/datasets/conll2003</span></p><p>只要您的数据集由拆分为具有相应标签的单词的文本组成，您就可以根据自己的数据集调整此处描述的数据处理过程。</p><p>The CoNLL-2003 dataset</p><p>要加载 CoNLL-2003 数据集，我们使用 Datasets 库中的 load_dataset () 方法</p><pre><code>from datasets import load_dataset
+
+raw_datasets = load_dataset(&quot;conll2003&quot;)
+</code></pre><p>检查此对象向我们显示了存在的列以及训练集、验证集和测试集之间的拆分：</p><pre><code>raw_datasets
+
+DatasetDict(&#123;
+    train: Dataset(&#123;
+        features: ['chunk_tags', 'id', 'ner_tags', 'pos_tags', 'tokens'],
+        num_rows: 14041
+    &#125;)
+    validation: Dataset(&#123;
+        features: ['chunk_tags', 'id', 'ner_tags', 'pos_tags', 'tokens'],
+        num_rows: 3250
+    &#125;)
+    test: Dataset(&#123;
+        features: ['chunk_tags', 'id', 'ner_tags', 'pos_tags', 'tokens'],
+        num_rows: 3453
+    &#125;)
+&#125;)
+</code></pre><p>特别是，我们可以看到数据集包含我们之前提到的三个任务的标签：NER，POS 和分块。与其他数据集的一大区别在于，输入文本不是以句子或文档的形式呈现的，而是以单词列表的形式呈现的（最后一列称为 tokens ，但它包含的单词是预先标记化的输入，仍然需要通过分词器进行子词标记化）</p><p>看一下训练集的第一个元素</p><pre><code>raw_datasets[&quot;train&quot;][0][&quot;tokens&quot;]
+
+['EU', 'rejects', 'German', 'call', 'to', 'boycott', 'British', 'lamb', '.']
+</code></pre><p>由于我们要执行命名实体识别，因此我们将查看 NER 标签：</p><pre><code>raw_datasets[&quot;train&quot;][0][&quot;ner_tags&quot;]
+
+[3, 0, 7, 0, 0, 0, 7, 0, 0]
+</code></pre><p>这些是准备训练的整数标签，但是当我们想要检查数据时，它们不一定有用。与文本分类一样，我们可以通过查看数据集的 features 属性来访问这些整数和标签名称之间的对应关系</p><pre><code>ner_feature = raw_datasets[&quot;train&quot;].features[&quot;ner_tags&quot;]
+ner_feature
+
+Sequence(feature=ClassLabel(num_classes=9, names=['O', 'B-PER', 'I-PER', 'B-ORG', 'I-ORG', 'B-LOC', 'I-LOC', 'B-MISC', 'I-MISC'], names_file=None, id=None), length=-1, id=None)
+</code></pre><pre><code>raw_datasets['train'].features  # 类型为 datasets.features.features.Features
+
+&#123;'id': Value(dtype='string', id=None),
+ 'tokens': Sequence(feature=Value(dtype='string', id=None), length=-1, id=None),
+ 'pos_tags': Sequence(feature=ClassLabel(num_classes=47, names=['&quot;', &quot;''&quot;, '#', '$', '(', ')', ',', '.', ':', '``', 'CC', 'CD', 'DT', 'EX', 'FW', 'IN', 'JJ', 'JJR', 'JJS', 'LS', 'MD', 'NN', 'NNP', 'NNPS', 'NNS', 'NN|SYM', 'PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB'], id=None), length=-1, id=None),
+ 'chunk_tags': Sequence(feature=ClassLabel(num_classes=23, names=['O', 'B-ADJP', 'I-ADJP', 'B-ADVP', 'I-ADVP', 'B-CONJP', 'I-CONJP', 'B-INTJ', 'I-INTJ', 'B-LST', 'I-LST', 'B-NP', 'I-NP', 'B-PP', 'I-PP', 'B-PRT', 'I-PRT', 'B-SBAR', 'I-SBAR', 'B-UCP', 'I-UCP', 'B-VP', 'I-VP'], id=None), length=-1, id=None),
+ 'ner_tags': Sequence(feature=ClassLabel(num_classes=9, names=['O', 'B-PER', 'I-PER', 'B-ORG', 'I-ORG', 'B-LOC', 'I-LOC', 'B-MISC', 'I-MISC'], id=None), length=-1, id=None)&#125;
+</code></pre><p>因此，此列包含作为 ClassLabels 序列的元素。序列元素的类型位于 ner_feature 的 feature 属性中，我们可以通过查看 names 属性来访问名称列表</p><pre><code>label_names = ner_feature.feature.names
+label_names
+
+['O', 'B-PER', 'I-PER', 'B-ORG', 'I-ORG', 'B-LOC', 'I-LOC', 'B-MISC', 'I-MISC']
+</code></pre><p>O means the word doesn’t correspond to any entity.<br>B-PER/I-PER means the word corresponds to the beginning of/is inside a person entity.<br>B-ORG/I-ORG means the word corresponds to the beginning of/is inside an organization entity.<br>B-LOC/I-LOC means the word corresponds to the beginning of/is inside a location entity.<br>B-MISC/I-MISC means the word corresponds to the beginning of/is inside a miscellaneous entity.</p><p>现在解码我们之前看到的标签可以得到这个：</p><pre><code>words = raw_datasets[&quot;train&quot;][0][&quot;tokens&quot;]
+labels = raw_datasets[&quot;train&quot;][0][&quot;ner_tags&quot;]
+line1 = &quot;&quot;
+line2 = &quot;&quot;
+for word, label in zip(words, labels):
+    full_label = label_names[label]
+    max_length = max(len(word), len(full_label))
+    line1 += word + &quot; &quot; * (max_length - len(word) + 1)
+    line2 += full_label + &quot; &quot; * (max_length - len(full_label) + 1)
+
+print(line1)
+print(line2)
+
+'EU    rejects German call to boycott British lamb .'
+'B-ORG O       B-MISC O    O  O       B-MISC  O    O'
+</code></pre><p>对于混合 B- 和 I - 标签的示例，这是相同的代码在索引 4 处的训练集元素上给出的内容</p><pre><code>'Germany \'s representative to the European Union \'s veterinary committee Werner Zwingmann said on Wednesday consumers should buy sheepmeat from countries other than Britain until the scientific advice was clearer .'
+'B-LOC   O  O              O  O   B-ORG    I-ORG O  O          O         B-PER  I-PER     O    O  O         O         O      O   O         O    O         O     O    B-LOC   O     O   O          O      O   O       O'
+</code></pre><p>跨越两个单词的实体，如 “European Union” 和 “Werner Zwingmann”，被归因于 B - 第一个单词的标签和 I - 第二个单词的标签</p><p>Processing the data</p><p>像往常一样，我们的文本需要转换为令牌 ID，然后模型才能理解它们。正如我们在第 6 章中看到的，令牌分类任务的一大区别在于我们有预先标记化的输入。幸运的是，分词器 API 可以很容易地处理这个问题。我们只需要用一个特殊的标志来警告 tokenizer。</p><p>首先，让我们创建我们的 tokenizer 对象。如前所述，我们将使用 BERT 预训练模型，因此我们将从下载并缓存关联的分词器开始</p><pre><code>from transformers import AutoTokenizer
+
+model_checkpoint = &quot;bert-base-cased&quot;
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+</code></pre><p>可以将 model_checkpoint 替换为你从 Hub 中喜欢的任何其他模型，或者替换为已在其中保存预训练模型和分词器的本地文件夹。唯一的约束是分词器需要由 🤗 Tokenizers 库支持，因此有一个 “快速” 版本可用。您可以在这个大表 <span class="exturl" data-url="aHR0cHM6Ly9odWdnaW5nZmFjZS5jby90cmFuc2Zvcm1lcnMvI3N1cHBvcnRlZC1mcmFtZXdvcmtz">https://huggingface.co/transformers/#supported-frameworks</span> 中看到快速版本附带的所有体系结构，并且要检查您正在使用的对象是否确实由🤗 Tokenizers 支持，您可以查看其 is_fast 属性</p><pre><code>tokenizer.is_fast
+
+True
+</code></pre><p>要标记预先标记化的输入，我们可以像往常一样使用我们的，只需添加 is_split_into_words=True</p><pre><code>inputs = tokenizer(raw_datasets[&quot;train&quot;][0][&quot;tokens&quot;], is_split_into_words=True)
+inputs.tokens()
+
+['[CLS]', 'EU', 'rejects', 'German', 'call', 'to', 'boycott', 'British', 'la', '##mb', '.', '[SEP]']
+</code></pre><p>正如我们所看到的，分词器添加了模型使用的特殊标记（在开头 [CLS] 和 [SEP] 结尾），并且保留了大部分单词不变。lamb 然而，这个词被标记成两个子词，和。这引入了输入和标签之间的不匹配：标签列表只有 9 个元素，而我们的输入现在有 12 个标记。计算特殊令牌很容易（我们知道它们在开头和结尾），但我们还需要确保将所有标签与正确的单词对齐</p><p>幸运的是，由于我们使用的是快速分词器，因此我们可以访问 Tokenizers 分词器超能力，这意味着我们可以轻松地将每个标记映射到其相应的单词</p><pre><code>inputs.word_ids()
+
+[None, 0, 1, 2, 3, 4, 5, 6, 7, 7, 8, None]
+</code></pre><p>通过一点点工作，我们可以扩展标签列表以匹配令牌。我们要应用的第一个规则是，特殊令牌的标签为 - 100 。这是因为默认情况下，在我们将使用的损失函数（交叉熵）中忽略了一个索引 - 100 。然后，每个令牌都获得与启动其内部单词的令牌相同的标签，因为它们是同一实体的一部分。对于单词内但不在开头的标记，我们将 B - 替换为 I-（因为标记不以实体开头）</p><pre><code>def align_labels_with_tokens(labels, word_ids):
+    new_labels = []
+    current_word = None
+    for word_id in word_ids:
+        if word_id != current_word:
+            # Start of a new word!
+            current_word = word_id
+            label = -100 if word_id is None else labels[word_id]
+            new_labels.append(label)
+        elif word_id is None:
+            # Special token
+            new_labels.append(-100)
+        else:
+            # Same word as previous token
+            label = labels[word_id]
+            # If the label is B-XXX we change it to I-XXX
+            if label % 2 == 1:
+                label += 1
+            new_labels.append(label)
+
+    return new_labels
+
+
+labels = raw_datasets[&quot;train&quot;][0][&quot;ner_tags&quot;]
+word_ids = inputs.word_ids()
+print(labels)
+print(align_labels_with_tokens(labels, word_ids))
+
+[3, 0, 7, 0, 0, 0, 7, 0, 0]
+[-100, 3, 0, 7, 0, 0, 0, 7, 0, 0, 0, -100]
+
+</code></pre><p>一些研究人员更喜欢每个单词只归因于一个标签，并分配 - 100 给给定单词中的其他子标记。这是为了避免长单词分裂成许多子标记，从而严重导致损失。按照此规则更改上一个函数以将标签与输入 ID 对齐。</p><p>要预处理整个数据集，我们需要标记所有输入并应用 align_labels_with_tokens () 于所有标签。为了利用我们的快速分词器的速度，最好同时对大量文本进行标记，因此我们将编写一个函数来处理示例列表，并将 Dataset.map () 方法与选项 batched=True 一起使用。与我们之前的示例唯一不同的是， word_ids () 函数需要获取示例的索引，当分词器的输入是文本列表（或者在我们的例子中，是单词列表）时，我们想要的单词 ID，因此我们也添加它：</p><pre><code>def tokenize_and_align_labels(examples):
+    tokenized_inputs = tokenizer(
+        examples[&quot;tokens&quot;], truncation=True, is_split_into_words=True
+    )
+    all_labels = examples[&quot;ner_tags&quot;]
+    new_labels = []
+    for i, labels in enumerate(all_labels):
+        word_ids = tokenized_inputs.word_ids(i)
+        new_labels.append(align_labels_with_tokens(labels, word_ids))
+
+    tokenized_inputs[&quot;labels&quot;] = new_labels
+    return tokenized_inputs
+</code></pre><p>请注意，我们还没有填充我们的输入；稍后，在使用数据整理器 data collator 创建批处理时，我们将执行此操作。</p><p>现在，我们可以一次性将所有预处理应用到数据集的其他拆分上：</p><pre><code>tokenized_datasets = raw_datasets.map(
+    tokenize_and_align_labels,
+    batched=True,
+    remove_columns=raw_datasets[&quot;train&quot;].column_names,
+)
+</code></pre><p>Fine-tuning the model with the Trainer API</p><p>Data collation</p><p>我们不能使用 DataCollatorWithPadding，因为它只填充输入（输入 ID，注意力掩码和令牌类型 ID）。在这里，我们的标签应该以与输入完全相同的方式填充，以便它们保持相同的大小，用 - 100 作值，以便在损失计算中忽略相应的预测。</p><p>这一切都是由 DataCollatorForTokenClassification 完成的。像 DataCollatorWithPadding 一样，它采用 tokenizer 输入</p><pre><code>from transformers import DataCollatorForTokenClassification
+
+data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
+</code></pre><p>为了在几个样本上测试这一点，我们可以在标记化训练集中的示例列表中调用它</p><pre><code>batch = data_collator([tokenized_datasets[&quot;train&quot;][i] for i in range(2)])
+batch[&quot;labels&quot;]
+
+tensor([[-100,    3,    0,    7,    0,    0,    0,    7,    0,    0,    0, -100],
+        [-100,    1,    2, -100, -100, -100, -100, -100, -100, -100, -100, -100]])
+</code></pre><p>让我们将其与数据集中第一个和第二个元素的标签进行比较：</p><pre><code>for i in range(2):
+    print(tokenized_datasets[&quot;train&quot;][i][&quot;labels&quot;])
+
+[-100, 3, 0, 7, 0, 0, 0, 7, 0, 0, 0, -100]
+[-100, 1, 2, -100]
+</code></pre><p>正如我们所看到的，第二组标签已使用 - 100s 填充到第一组标签的长度。</p><p>Metrics</p><p>要让每个 epoch Trainer 计算一个指标，我们需要定义 compute_metrics () 函数，该函数采用预测和标签数组，并返回一个包含指标名称和值的字典。</p><p>用于评估令牌分类预测的传统框架是 seqeval。要使用此指标，我们首先需要安装 seqeval 库：</p><pre><code>pip install seqeval
+</code></pre><p>然后，我们可以通过 evaluate.load () 函数加载它，</p><pre><code>import evaluate
+
+metric = evaluate.load(&quot;seqeval&quot;)
+</code></pre><p>此指标的行为与标准准确性不同：它实际上会将标签列表作为字符串而不是整数，因此我们需要在将预测和标签传递给指标之前对其进行完全解码。让我们看看它是如何工作的。首先，我们将获取第一个训练示例的标签：</p><pre><code>labels = raw_datasets[&quot;train&quot;][0][&quot;ner_tags&quot;]
+labels = [label_names[i] for i in labels]
+labels
+
+['B-ORG', 'O', 'B-MISC', 'O', 'O', 'O', 'B-MISC', 'O', 'O']
+</code></pre><p>然后，我们可以通过更改索引 2 处的值来为这些预测创建虚假预测：</p><pre><code>predictions = labels.copy()
+predictions[2] = &quot;O&quot;
+metric.compute(predictions=[predictions], references=[labels])
+</code></pre><p>请注意，该指标需要一个预测列表（而不仅仅是一个）和一个标签列表。下面是输出</p><pre><code>&#123;'MISC': &#123;'precision': 1.0, 'recall': 0.5, 'f1': 0.67, 'number': 2&#125;,
+ 'ORG': &#123;'precision': 1.0, 'recall': 1.0, 'f1': 1.0, 'number': 1&#125;,
+ 'overall_precision': 1.0,
+ 'overall_recall': 0.67,
+ 'overall_f1': 0.8,
+ 'overall_accuracy': 0.89&#125;
+
+</code></pre><p>compute_metrics () 函数首先采用 logits 的 argmax 将其转换为预测（像往常一样，logits 和概率的顺序相同，因此我们不需要应用 softmax）。然后，我们必须将标签和预测从整数转换为字符串。我们删除 - 100 标签所在的所有值，然后将结果传递给 metric.compute () 方法：</p><pre><code>import numpy as np
+
+
+def compute_metrics(eval_preds):
+    logits, labels = eval_preds
+    predictions = np.argmax(logits, axis=-1)
+
+    # Remove ignored index (special tokens) and convert to labels
+    true_labels = [[label_names[l] for l in label if l != -100] for label in labels]
+    true_predictions = [
+        [label_names[p] for (p, l) in zip(prediction, label) if l != -100]
+        for prediction, label in zip(predictions, labels)
+    ]
+    all_metrics = metric.compute(predictions=true_predictions, references=true_labels)
+    return &#123;
+        &quot;precision&quot;: all_metrics[&quot;overall_precision&quot;],
+        &quot;recall&quot;: all_metrics[&quot;overall_recall&quot;],
+        &quot;f1&quot;: all_metrics[&quot;overall_f1&quot;],
+        &quot;accuracy&quot;: all_metrics[&quot;overall_accuracy&quot;],
+    &#125;
+</code></pre><p>Defining the model</p><p>由于我们正在研究令牌分类问题，因此我们将使用 AutoModelForTokenClassification 类。定义此模型时要记住的主要事项是传递有关我们拥有的标签数量的一些信息。最简单的方法是将该数字通过参数 num_labels 传递，但是如果我们想要一个漂亮的推理小部件，就像我们在本节开头看到的一样，最好设置正确的标签对应关系。</p><p>它们应由两个字典 id2label 和 label2id 设置，其中包含从 ID 到标签的映射，反之亦然：</p><pre><code>id2label = &#123;str(i): label for i, label in enumerate(label_names)&#125;
+label2id = &#123;v: k for k, v in id2label.items()&#125;
+</code></pre><p>现在，我们可以将它们传递给 AutoModelForTokenClassification.from_pretrained () 方法，它们将在模型的配置中设置，然后正确保存并上传到 Hub</p><pre><code>from transformers import AutoModelForTokenClassification
+
+model = AutoModelForTokenClassification.from_pretrained(
+    model_checkpoint,
+    id2label=id2label,
+    label2id=label2id,
+)
+</code></pre><p>让我们仔细检查我们的模型是否具有正确数量的标签</p><pre><code>model.config.num_labels
+
+9
+</code></pre><p>如果模型的标签数量错误，则在以后调用 Trainer.train () 方法时将收到一个模糊的错误（类似于 “CUDA error: device-side assert triggered”）。这是用户报告此类错误的错误的头号原因，因此请确保执行此检查以确认您具有预期的标签数。</p><p>Fine-tuning the model</p><p>we can define our TrainingArguments:</p><pre><code>from transformers import TrainingArguments
+
+args = TrainingArguments(
+    &quot;bert-finetuned-ner&quot;,
+    evaluation_strategy=&quot;epoch&quot;,
+    save_strategy=&quot;epoch&quot;,
+    learning_rate=2e-5,
+    num_train_epochs=3,
+    weight_decay=0.01,
+    push_to_hub=True,
+)
+</code></pre><p>我们设置了一些超参数（例如学习速率、要训练的 epoch 数和权重衰减），并且我们指定 push_to_hub=True 指示我们要保存模型并在每个纪元结束时对其进行评估，并且我们希望将结果上传到模型中心。请注意，您可以使用参数 hub_model_id 指定要推送到的存储库的名称（特别是，您必须使用此参数推送到组织）。例如，当我们将模型推送到拥抱脸课程组织时，我们添加了 hub_model_id=&quot;huggingface-course/bert-finetuned-ner&quot;. 默认情况下，使用的存储库将位于您的命名空间中，并以您设置的输出目录命名，因此在我们的例子中，它将是</p><p>最后，我们只是将所有内容传递给 Trainer 并启动训练</p><pre><code>from transformers import Trainer
+
+trainer = Trainer(
+    model=model,
+    args=args,
+    train_dataset=tokenized_datasets[&quot;train&quot;],
+    eval_dataset=tokenized_datasets[&quot;validation&quot;],
+    data_collator=data_collator,
+    compute_metrics=compute_metrics,
+    tokenizer=tokenizer,
+)
+trainer.train()
+</code></pre><p>请注意，在训练发生时，每次保存模型（此处为每个 epoch）时，都会在后台将其上传到 Hub。这样，如有必要，您将能够在另一台机器上恢复训练。</p><p>训练完成后，我们使用 push_to_hub () 方法来确保上传最新版本的模型</p><pre><code>trainer.push_to_hub(commit_message=&quot;Training complete&quot;)
+</code></pre><p>此命令返回它刚刚执行的提交的 URL，如果要检查它</p><pre><code>'https://huggingface.co/sgugger/bert-finetuned-ner/commit/26ab21e5b1568f9afeccdaed2d8715f571d786ed'
+</code></pre><p>A custom training loop</p><p>Preparing everything for training</p><p>首先，我们需要从数据集构建 DataLoaders。我们将重用我们的 data_collator 作为 collate_fn 并洗牌训练集，但不重用验证集</p><pre><code>from torch.utils.data import DataLoader
+
+train_dataloader = DataLoader(
+    tokenized_datasets[&quot;train&quot;],
+    shuffle=True,
+    collate_fn=data_collator,
+    batch_size=8,
+)
+eval_dataloader = DataLoader(
+    tokenized_datasets[&quot;validation&quot;], collate_fn=data_collator, batch_size=8
+)
+</code></pre><p>接下来，我们重新实例化我们的模型，以确保我们不会继续之前的微调，而是再次从 BERT 预训练模型开始</p><pre><code>model = AutoModelForTokenClassification.from_pretrained(
+    model_checkpoint,
+    id2label=id2label,
+    label2id=label2id,
+)
+</code></pre><p>然后我们需要一个优化器。我们将使用经典的 AdamW，它类似于 Adam，但是在应用权重衰减的方式上进行了修复</p></div><footer><div class="meta"><span class="item"><span class="icon"><i class="ic i-calendar-check"></i> </span><span class="text">更新于</span> <time title="修改时间：2022-09-21 10:27:32" itemprop="dateModified" datetime="2022-09-21T10:27:32+08:00">2022-09-21</time></span></div><div class="reward"><button><i class="ic i-heartbeat"></i> 赞赏</button><p>请我喝[茶]~(￣▽￣)~*</p><div id="qr"><div><img data-src="/images/wechatpay.png" alt="yuan 微信支付"><p>微信支付</p></div><div><img data-src="/images/alipay.png" alt="yuan 支付宝"><p>支付宝</p></div><div><img data-src="/images/paypal.png" alt="yuan 贝宝"><p>贝宝</p></div></div></div><div id="copyright"><ul><li class="author"><strong>本文作者： </strong>yuan <i class="ic i-at"><em>@</em></i>yuan</li><li class="link"><strong>本文链接：</strong> <a href="https://huang-junyuan.github.io/2022/09/03/ai/nlp/base/huggingface/">https://huang-junyuan.github.io/2022/09/03/ai/nlp/base/huggingface/</a></li><li class="license"><strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！</li></ul></div></footer></article></div><div class="post-nav"><div class="item left"><a href="/2022/09/03/frontend/javascript/JavaScript%E6%96%87%E6%A1%A3%E5%85%83%E7%B4%A0%E6%93%8D%E4%BD%9C/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giclga70tsj20zk0m84mr.jpg" title="未命名"><span class="type">上一篇</span> <span class="category"><i class="ic i-flag"></i></span><h3>未命名</h3></a></div><div class="item right"><a href="/2022/09/07/ai/cv/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva1.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giclx29mstj20zk0m8hdt.jpg" title="图像分类"><span class="type">下一篇</span> <span class="category"><i class="ic i-flag"></i> cv</span><h3>图像分类</h3></a></div></div><div class="wrap" id="comments"></div></div><div id="sidebar"><div class="inner"><div class="panels"><div class="inner"><div class="contents panel pjax" data-title="文章目录"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-datasets-library"><span class="toc-number">1.</span> <span class="toc-text">THE DATASETS LIBRARY</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#what-if-my-dataset-isnt-on-the-hub"><span class="toc-number">1.2.</span> <span class="toc-text">What if my dataset isn&#39;t on the Hub?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#time-to-slice-and-dice"><span class="toc-number">1.3.</span> <span class="toc-text">Time to slice and dice</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-tokenizers-library"><span class="toc-number">2.</span> <span class="toc-text">THE TOKENIZERS LIBRARY</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#token-classification"><span class="toc-number">3.</span> <span class="toc-text">Token classification</span></a></li></ol></div><div class="related panel pjax" data-title="系列文章"></div><div class="overview panel" data-title="站点概览"><div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="image" itemprop="image" alt="yuan" data-src="/images/avatar.jpg"><p class="name" itemprop="name">yuan</p><div class="description" itemprop="description"></div></div><nav class="state"><div class="item posts"><a href="/archives/"><span class="count">186</span> <span class="name">文章</span></a></div><div class="item categories"><a href="/categories/"><span class="count">40</span> <span class="name">分类</span></a></div><div class="item tags"><a href="/tags/"><span class="count">37</span> <span class="name">标签</span></a></div></nav><div class="social"><span class="exturl item email" data-url="bWFpbHRvOjIwODM2MzU1MjVAcXEuY29t" title="mailto:2083635525@qq.com"><i class="ic i-envelope"></i></span></div><ul class="menu"><li class="item"><a href="/" rel="section"><i class="ic i-home"></i>首页</a></li><li class="item"><a href="/about/" rel="section"><i class="ic i-user"></i>关于</a></li><li class="item dropdown"><a href="javascript:void(0);"><i class="ic i-feather"></i>文章</a><ul class="submenu"><li class="item"><a href="/archives/" rel="section"><i class="ic i-list-alt"></i>归档</a></li><li class="item"><a href="/categories/" rel="section"><i class="ic i-th"></i>分类</a></li><li class="item"><a href="/tags/" rel="section"><i class="ic i-tags"></i>标签</a></li></ul></li></ul></div></div></div><ul id="quick"><li class="prev pjax"><a href="/2022/09/03/frontend/javascript/JavaScript%E6%96%87%E6%A1%A3%E5%85%83%E7%B4%A0%E6%93%8D%E4%BD%9C/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a></li><li class="up"><i class="ic i-arrow-up"></i></li><li class="down"><i class="ic i-arrow-down"></i></li><li class="next pjax"><a href="/2022/09/07/ai/cv/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a></li><li class="percent"></li></ul></div></div><div class="dimmer"></div></div></main><footer id="footer"><div class="inner"><div class="widgets"><div class="rpost pjax"><h2>随机文章</h2><ul><li class="item"><div class="breadcrumb"></div><span><a href="/2022/10/20/computer-science/algorithm/LeetCode/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="未命名">未命名</a></span></li><li class="item"><div class="breadcrumb"></div><span><a href="/2022/11/06/computer-science/base/AiForStorage/note/" title="未命名">未命名</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/nlp/" title="分类于 nlp">nlp</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/nlp/base/" title="分类于 base">base</a></div><span><a href="/2022/08/24/ai/nlp/base/PyTorch-%E4%B8%AD-LSTM-%E7%9A%84-output%E3%80%81h-n-%E5%92%8C-c-n-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/" title="PyTorch_中_LSTM_的_output、h_n_和_c_n_之间的关系">PyTorch_中_LSTM_的_output、h_n_和_c_n_之间的关系</a></span></li><li class="item"><div class="breadcrumb"></div><span><a href="/2022/08/30/computer-science/base/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/" title="未命名">未命名</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/frontend/" title="分类于 前端">前端</a> <i class="ic i-angle-right"></i> <a href="/categories/frontend/vue/" title="分类于 vue">vue</a> <i class="ic i-angle-right"></i> <a href="/categories/frontend/vue/mediapipe-vue/" title="分类于 mediapipe-vue">mediapipe-vue</a></div><span><a href="/2022/09/21/frontend/mediapine-vue/%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB/" title="手势识别">手势识别</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/frontend/" title="分类于 前端">前端</a> <i class="ic i-angle-right"></i> <a href="/categories/frontend/vue/" title="分类于 vue">vue</a> <i class="ic i-angle-right"></i> <a href="/categories/frontend/vue/mediapipe-vue/" title="分类于 mediapipe-vue">mediapipe-vue</a></div><span><a href="/2022/09/18/frontend/mediapine-vue/%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B/" title="人脸检测">人脸检测</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/cv/" title="分类于 cv">cv</a></div><span><a href="/2022/08/24/ai/cv/face-alignment%EF%BC%9Aface-alignment%E5%BA%93%E7%9A%84%E7%AE%80%E4%BB%8B%E3%80%81%E5%AE%89%E8%A3%85%E3%80%81%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="face_alignment：face_alignment库的简介、安装、使用方法">face_alignment：face_alignment库的简介、安装、使用方法</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/ai/" title="分类于 ai">ai</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/nlp/" title="分类于 nlp">nlp</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/nlp/huggingface/" title="分类于 huggingface">huggingface</a> <i class="ic i-angle-right"></i> <a href="/categories/ai/nlp/huggingface/%E4%B8%BB%E8%A6%81nlp%E4%BB%BB%E5%8A%A1/" title="分类于 主要nlp任务">主要nlp任务</a></div><span><a href="/2022/11/12/ai/nlp/huggingface/%E4%B8%BB%E8%A6%81%E7%9A%84%20NLP%20%E4%BB%BB%E5%8A%A1/%E9%97%AE%E7%AD%94/" title="问答 question answer">问答 question answer</a></span></li><li class="item"><div class="breadcrumb"><a href="/categories/frontend/" title="分类于 前端">前端</a> <i class="ic i-angle-right"></i> <a href="/categories/frontend/vue/" title="分类于 vue">vue</a></div><span><a href="/2022/09/12/frontend/vue/vue%E9%85%8D%E7%BD%AE%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82/" title="vue配置跨域请求">vue配置跨域请求</a></span></li><li class="item"><div class="breadcrumb"></div><span><a href="/2022/10/14/computer-science/%E9%AB%98%E7%BA%A7%E8%BD%AF%E8%80%83/%E9%80%89%E6%8B%A9%E9%A2%98/%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/" title="未命名">未命名</a></span></li></ul></div><div><h2>最新评论</h2><ul class="leancloud-recent-comment"></ul></div></div><div class="status"><div class="copyright">&copy; 2010 – <span itemprop="copyrightYear">2022</span> <span class="with-love"><i class="ic i-sakura rotate"></i> </span><span class="author" itemprop="copyrightHolder">yuan @ Mi Manchi</span></div><div class="count"><span class="post-meta-item-icon"><i class="ic i-chart-area"></i> </span><span title="站点总字数">1.1m 字</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="ic i-coffee"></i> </span><span title="站点阅读时长">16:30</span></div><div class="powered-by">基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span></div></div></div></footer></div><script data-config type="text/javascript">var LOCAL={path:"2022/09/03/ai/nlp/base/huggingface/",favicon:{show:"（●´3｀●）やれやれだぜ",hide:"(´Д｀)大変だ！"},search:{placeholder:"文章搜索",empty:"关于 「 ${query} 」，什么也没搜到",stats:"${time} ms 内找到 ${hits} 条结果"},valine:!0,fancybox:!0,copyright:'复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',ignores:[function(e){return e.includes("#")},function(e){return new RegExp(LOCAL.path+"$").test(e)}]}</script><script src="https://cdn.polyfill.io/v2/polyfill.js"></script><script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script><script src="/js/app.js?v=0.2.5"></script></body></html>
